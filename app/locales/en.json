@@ -13,5 +13,8 @@
   "error": {
     "404": "Page not found",
     "500": "We're experiencing technical problems."
+  },
+  "layout": {
+    "title": "Work you could do"
   }
 }
