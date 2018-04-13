@@ -1,15 +1,10 @@
-class MainPage {
-  constructor(browser) {
-    this.browser = browser;
-  }
+const IntroductionPage = function (browser) {
+  this.browser = browser;
 
-  visit(account) {
-    return this.browser.visit(`/${account}/introduction`);
-  }
+  this.visit = (account) => this.browser.visit(`/${account}/introduction`);
+  this.getText = () => this.browser.text('#content');
+  this.clickNext = () => this.browser.click('[data-test="next"]');
+  this.browserPath = () => browser.location.pathname;
+};
 
-  getText() {
-    return this.browser.text('#content');
-  }
-
-}
-module.exports = MainPage;
+module.exports = IntroductionPage;
