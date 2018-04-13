@@ -1,6 +1,6 @@
 {
-  "name": "hello-world",
-  "repository": "https://github.com/lm-tools/hello-world",
+  "name": "work-you-could-do",
+  "repository": "https://github.com/lm-tools/work-you-could-do-node",
   "scripts": {
     "postdeploy": "npm run db-migrate"
   },

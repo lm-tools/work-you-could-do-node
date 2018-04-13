@@ -1,4 +1,4 @@
-# Hello-world
+# work-you-could-do
 
 [![Build status][build status image]][ci]
 
@@ -22,8 +22,8 @@ a `DATABASE_URL` environment variable to a valid [PostgreSQL connection string]
 Setup the application:
 
 ```sh
-$ psql -c "create database hello_world;"
-$ psql -c "create database hello_world_test;"
+$ psql -c "create database work_you_could_do;"
+$ psql -c "create database work_you_could_do_test;"
 $ npm install
 $ npm run watch
 ```
@@ -33,10 +33,10 @@ $ npm run watch
 The app will run mounted at `/` by default. To run within a directory, set the
 `EXPRESS_BASE_PATH` environment variable.
 
-For example, to mount the application at `/hello-world`, run:
+For example, to mount the application at `/work-you-could-do`, run:
 
 ```sh
-$ EXPRESS_BASE_PATH=/hello-world npm run start
+$ EXPRESS_BASE_PATH=/work-you-could-do npm run start
 ```
 
 ## Test user creation
@@ -46,8 +46,8 @@ You can create user and then fetch all the users by executing below commands
     $ curl -X POST http://localhost:3000/users -d '{"name":"some name","surname":"some surname123"}' -H "Content-Type: application/json"
     $ curl http://localhost:3000/users
 
-[build status image]: https://api.travis-ci.org/lm-tools/hello-world.svg
-[ci]: https://travis-ci.org/lm-tools/hello-world
+[build status image]: https://api.travis-ci.org/lm-tools/work-you-could-do-node.svg
+[ci]: https://travis-ci.org/lm-tools/work-you-could-do-node
 [express]: http://expressjs.com/
 [gov.uk]: https://www.gov.uk/
 [heroku deploy image]: https://www.herokucdn.com/deploy/button.svg
