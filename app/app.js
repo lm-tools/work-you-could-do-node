@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 const indexController = require('./controllers/index-controller');
 const introductionController = require('./controllers/introduction-controller');
+const searchController = require('./controllers/search-controller');
 const cookieController = require('./controllers/cookie-controller');
 const i18n = require('./middleware/i18n');
 const errorHandler = require('./middleware/error-handler');
@@ -78,6 +79,7 @@ app.use(helmet.noCache());
 app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
 app.use(`${basePath}/:accountId/introduction`, introductionController);
+app.use(`${basePath}/:accountId/search`, searchController);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

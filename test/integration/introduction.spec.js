@@ -16,5 +16,11 @@ describe('Introduction', () => {
     expect(introductionPage.getText())
       .to.include('Use this tool to help your work search and discover')
   );
+
+  it('should link to search page', () =>
+    introductionPage.clickNext().then(() =>
+      expect(introductionPage.browserPath()).to.match(new RegExp(`${account}/search/new`))
+    )
+  );
 });
 
