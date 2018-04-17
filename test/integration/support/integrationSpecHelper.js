@@ -8,6 +8,7 @@ const MainPage = require('../../common/page_objects/main-page');
 const ErrorPage = require('../../common/page_objects/error-page');
 const CookiePage = require('../../common/page_objects/cookie-page');
 const IntroductionPage = require('../../common/page_objects/introduction-page');
+const SearchPage = require('../../common/page_objects/search-page');
 
 process.env.GOOGLE_TAG_MANAGER_ID = 'fake-id';
 process.env.PORT = port;
@@ -26,5 +27,6 @@ module.exports = {
   errorPage: new ErrorPage(browser),
   cookiePage: new CookiePage(browser),
   introductionPage: new IntroductionPage(browser),
+  searchPage: new SearchPage(browser),
   app,
 };
