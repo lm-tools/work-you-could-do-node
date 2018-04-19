@@ -12,6 +12,7 @@ const SearchPage = require('../../common/page_objects/search-page');
 
 process.env.GOOGLE_TAG_MANAGER_ID = 'fake-id';
 process.env.PORT = port;
+process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 const app = require('../../../bin/www');
 
 afterEach(function () {
