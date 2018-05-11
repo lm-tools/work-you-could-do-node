@@ -7,7 +7,7 @@ describe('Response headers', () => {
   describe('for dynamic html', () => {
     before(() =>
       request(helper.app)
-        .get('/')
+        .get(helper.routes.introductionUrl(123))
         .then(response => {
           this.response = response;
         })
@@ -45,7 +45,7 @@ describe('Response headers', () => {
     describe(d.title, () => {
       before(() =>
         request(helper.app)
-          .get(d.path)
+          .get(`${helper.basePath}${d.path}`)
           .then(response => {
             this.response = response;
           })

@@ -2,9 +2,7 @@ const Page = require('./page.js');
 
 class OccupationPage extends Page {
   visit(account, occupationId, fromQuery) {
-    return this.browser.visit(
-      `/${account}/occupation/${occupationId}${fromQuery ? `?fromQuery=${fromQuery}` : ''}`
-    );
+    return this.browser.visit(this.routes.occupationUrl(account, occupationId, fromQuery));
   }
 
   getTasks() {
@@ -25,6 +23,10 @@ class OccupationPage extends Page {
 
   getBackLink() {
     return this.extractLink('back-to-search-results');
+  }
+
+  getHelpLink() {
+    return this.extractLink(('occupation-how-to'));
   }
 
 }

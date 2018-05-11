@@ -42,6 +42,14 @@
 
 </section>
 
+<form class="save-occupation-form" data-test="save-occupation-form">
+  <input type="hidden" name="socCode" value="{{occupation.soc}}">
+  <input type="hidden" name="fromQuery" value="{{fromQuery}}">
+  <input type="submit" class="button" value="Save" data-test="save-occupation">
+  <a class="button-secondary" href="{{basePath}}/{{accountId}}/occupationHowTo/{{occupation.soc}}?fromQuery={{fromQuery}}"
+     data-test="occupation-how-to">How do I use this?</a>
+</form>
+
 <p><a href="{{basePath}}/{{accountId}}/search?query={{fromQuery}}" class="link-back" data-test="back-to-search-results">Search results</a></p>
 
 {{/applicationContent}}

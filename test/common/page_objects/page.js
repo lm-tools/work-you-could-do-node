@@ -1,7 +1,8 @@
 class Page {
 
-  constructor(browser) {
+  constructor(browser, routes) {
     this.browser = browser;
+    this.routes = routes;
   }
   // eslint-disable-next-line no-unused-vars
   visit(...args) {

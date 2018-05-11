@@ -7,6 +7,7 @@ const before = helper.before;
 const after = helper.after;
 const it = helper.it;
 const describe = helper.describe;
+const routes = helper.routes;
 
 describe('Search', () => {
   const account = '109c346f-e64e-4bb5-9749-28dbbdfdfe55';
@@ -51,7 +52,7 @@ describe('Search', () => {
       expect(searchPage.getResults()).to.eql(this.mockedResponse.map(r => ({
         title: r.title,
         description: r.description,
-        href: `/${account}/occupation/${r.soc}?fromQuery=${this.mockSearchQuery}`,
+        href: routes.occupationUrl(account, r.soc, this.mockSearchQuery),
       })))
     );
   });

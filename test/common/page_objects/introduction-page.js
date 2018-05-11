@@ -1,10 +1,21 @@
-const IntroductionPage = function (browser) {
-  this.browser = browser;
+const Page = require('./page');
 
-  this.visit = (account) => this.browser.visit(`/${account}/introduction`);
-  this.getText = () => this.browser.text('#content');
-  this.clickNext = () => this.browser.click('[data-test="next"]');
-  this.browserPath = () => browser.location.pathname;
-};
+class IntroductionPage extends Page {
+  visit(account) {
+    return this.browser.visit(this.routes.introductionUrl(account));
+  }
+
+  getText() {
+    return this.browser.text('#content');
+  }
+
+  clickNext() {
+    return this.browser.click('[data-test="next"]');
+  }
+
+  browserPath() {
+    return this.browser.location.pathname;
+  }
+}
 
 module.exports = IntroductionPage;

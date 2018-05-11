@@ -3,6 +3,7 @@ const helper = require('./support/integrationSpecHelper');
 const browser = helper.browser;
 const introductionPage = helper.introductionPage;
 const { expect } = require('chai');
+const routes = helper.routes;
 
 describe('Entrypoints', () => {
   const accountId = uuid.v4();
@@ -12,13 +13,13 @@ describe('Entrypoints', () => {
   const accountEntryPointRegEx = `/${accountId}/introduction`;
 
   it('should see the entry page with a generated accountId if entry from root path', () =>
-    browser.visit('/')
+    browser.visit(routes.entrypointUrl())
       .then(() => expect(introductionPage.browserPath())
         .to.match(new RegExp(anonymousEntryPointRegEx)))
   );
 
   it('should see the entry page with referenced accountId', () =>
-    browser.visit(`/?id=${accountId}`)
+    browser.visit(routes.entrypointUrl(`?id=${accountId}`))
       .then(() =>
         expect(introductionPage.browserPath())
           .to.match(new RegExp(accountEntryPointRegEx))

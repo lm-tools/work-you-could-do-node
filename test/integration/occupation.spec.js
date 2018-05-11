@@ -6,6 +6,7 @@ const describe = helper.describe;
 const before = helper.before;
 const after = helper.after;
 const it = helper.it;
+const routes = helper.routes;
 
 const ACCOUNT_ID = 4567189203921863;
 const OCCUPATION_ID = 4235;
@@ -42,8 +43,14 @@ describe('Occupation', () => {
   );
   it('should display back link', () =>
     expect(occupationPage.getBackLink()).to.eql({
-      href: `/${ACCOUNT_ID}/search?query=${FROM_QUERY}`,
+      href: routes.searchUrl(ACCOUNT_ID, FROM_QUERY),
       text: 'Search results',
+    })
+  );
+  it('should display help link', () =>
+    expect(occupationPage.getHelpLink()).to.eql({
+      href: routes.occupationHowTo(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY),
+      text: 'How do I use this?',
     })
   );
   it('should display breadcrumb tbi', () =>
