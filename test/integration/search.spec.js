@@ -2,7 +2,11 @@ const helper = require('./support/integrationSpecHelper');
 const nock = require('nock');
 const googleTagManagerHelper = helper.googleTagManagerHelper;
 const searchPage = helper.searchPage;
-const expect = require('chai').expect;
+const expect = helper.expect;
+const before = helper.before;
+const after = helper.after;
+const it = helper.it;
+const describe = helper.describe;
 
 describe('Search', () => {
   const account = '109c346f-e64e-4bb5-9749-28dbbdfdfe55';
@@ -21,26 +25,35 @@ describe('Search', () => {
 
   describe('results', () => {
     before(() => {
+      this.mockSearchQuery = 'MockedRetail';
+      this.mockedResponse = [
+        { title: 'job title 1', description: 'a job description', soc: 1234 },
+        { title: 'job title 2', description: 'another job description', soc: 1234 },
+      ];
+      if (!nock.isActive()) {
+        nock.activate();
+      }
       nock('https://api.lmiforall.org.uk', { allowUnmocked: true })
         .get('/api/v1/soc/search')
         .query({
-          q: 'MockedRetail',
+          q: this.mockSearchQuery,
         })
-        .reply(200, [
-          { title: 'job title 1', description: 'a job description' },
-          { title: 'job title 2', description: 'another job description' },
-        ]);
+        .reply(200, this.mockedResponse);
       return searchPage.visit(account, 'MockedRetail');
     });
+    after(() => nock.restore());
 
     it('should not display search examples', () =>
       expect(searchPage.getText()).not.to.contain('e.g.')
     );
 
-    it('should display all search results', () => {
-      expect(searchPage.getText()).to.contain('job title 1');
-      expect(searchPage.getText()).to.contain('job title 2');
-    });
+    it('should display search results, descriptions and links', () =>
+      expect(searchPage.getResults()).to.eql(this.mockedResponse.map(r => ({
+        title: r.title,
+        description: r.description,
+        href: `/${account}/occupation/${r.soc}?fromQuery=${this.mockSearchQuery}`,
+      })))
+    );
   });
 });
 

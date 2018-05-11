@@ -13,27 +13,27 @@ describe('lmi service', () => {
       })
     )
   );
-  describe('socSearch', () => {
+  describe('searchSoc', () => {
     it('returns 200', () =>
-      lmiClientService.socSearch('check_authentication')
+      lmiClientService.searchSoc('check_authentication')
         .then(r => expect(r.statusCode).to.eql(200))
     );
   });
-  describe('hoursLookup', () => {
+  describe('getHours', () => {
     it('returns 200', () => {
-      lmiClientService.hoursLookup('4135')
+      lmiClientService.getHours('4135')
         .then(r => expect(r.statusCode).to.eql(200));
     });
   });
-  describe('payLookup', () => {
+  describe('getPay', () => {
     it('returns 200', () => {
-      lmiClientService.payLookup('4135')
+      lmiClientService.getPay('4135')
         .then(r => expect(r.statusCode).to.eql(200));
     });
   });
-  describe('socCodeLookup', () => {
+  describe('getSoc', () => {
     it('returns 200', () => {
-      lmiClientService.socCodeLookup('4135')
+      lmiClientService.getSoc('4135')
         .then(r => expect(r.statusCode).to.eql(200));
     });
   });

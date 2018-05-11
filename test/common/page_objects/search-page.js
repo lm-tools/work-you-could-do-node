@@ -1,10 +1,22 @@
-const SearchPage = function (browser) {
-  this.browser = browser;
+const Page = require('./page.js');
 
-  this.visit = (account, query) =>
-    this.browser.visit(`/${account}/search${query ? `?query=${query}` : ''}`);
-  this.clickSearch = () => this.browser.click('[data-test="search"]');
-  this.getText = () => this.browser.text('#content');
-};
+class SearchPage extends Page {
+  visit(account, query) {
+    return this.browser.visit(`/${account}/search${query ? `?query=${query}` : ''}`);
+  }
+
+  getText() {
+    return this.browser.text('#content');
+  }
+
+  getResults() {
+    const occupations = this.browser.queryAll('[data-test="occupation"]');
+    return occupations.map(occupationCtxt => ({
+      title: this.extractText('title', occupationCtxt),
+      description: this.extractText('summary', occupationCtxt),
+      href: this.browser.query('[data-test^="occupation-"]', occupationCtxt).getAttribute('href'),
+    }));
+  }
+}
 
 module.exports = SearchPage;

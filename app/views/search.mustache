@@ -13,19 +13,21 @@
         </label>
         <input type="text" name="query" id="query" class="form-control"
                title="Work, skills and interests"
-               value="">
+               value="{{query}}">
         <input type="submit" class="button" value="Search" data-test="search">
     </div>
 </form>
 
 {{#query}}
   {{#searchResults}}
-  <a href="{{basePath}}/{{accountId}}/occupations/{{soc}}" class="search-result">
-    <h4 class="bold-small">
-      {{title}}
-    </h4>
-    <p>{{description}}</p>
-  </a>
+    <div data-test="occupation">
+      <a href="{{basePath}}/{{accountId}}/occupation/{{soc}}?fromQuery={{query}}" class="search-result" data-test="occupation-{{soc}}">
+        <h4 class="bold-small" data-test="title">
+          {{title}}
+        </h4>
+        <p data-test="summary">{{description}}</p>
+      </a>
+    </div>
   {{/searchResults}}
 {{/query}}
 

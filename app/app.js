@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const indexController = require('./controllers/index-controller');
 const introductionController = require('./controllers/introduction-controller');
 const searchController = require('./controllers/search-controller');
+const occupationController = require('./controllers/occupation-controller');
 const cookieController = require('./controllers/cookie-controller');
 const i18n = require('./middleware/i18n');
 const errorHandler = require('./middleware/error-handler');
@@ -15,6 +16,8 @@ const healthCheckController = require('./controllers/health-check-controller');
 const helmet = require('helmet');
 const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
+
+const mocks = require('./../test/common/mocks');
 
 const app = express();
 i18n(app);
@@ -34,6 +37,12 @@ const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
 
 app.use('/health_check', healthCheckController);
 app.use(`${basePath}/health_check`, healthCheckController);
+
+// Add mock lmi api if required
+if (process.env.NODE_ENV === 'development') {
+  logger.info('detected development mode. Using nock library');
+  mocks.mockAll();
+}
 
 // Middleware to set default layouts.
 // This must be done per request (and not via app.locals) as the Consolidate.js
@@ -80,6 +89,7 @@ app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
 app.use(`${basePath}/:accountId/introduction`, introductionController);
 app.use(`${basePath}/:accountId/search`, searchController);
+app.use(`${basePath}/:accountId/occupation`, occupationController);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

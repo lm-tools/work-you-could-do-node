@@ -1,4 +1,5 @@
 const morgan = require('morgan');
+const winston = require('winston');
 const morganJson = require('morgan-json');
 const fs = require('fs');
 
@@ -61,3 +62,34 @@ module.exports.init = (env) => {
   }
   return morgan('dev+');
 };
+
+function jsonFormat(tokens, req, res) {
+  return JSON.stringify({
+    method: tokens.method(req, res),
+    path: tokens.url(req, res),
+    status: tokens.status(req, res),
+    bytes: tokens.res(req, res, 'content-length'),
+    duration: tokens.duration(req, res),
+  });
+}
+
+const logger = new winston.Logger({
+  level: 'info',
+  transports: [
+    new (winston.transports.Console)({ timestamp: true }),
+  ],
+});
+
+
+module.exports = Object.assign(logger, {
+  init: (env) => {
+    if (env === 'test') {
+      return morgan('tiny', {
+        stream: fs.createWriteStream(`${__dirname}/logs/test.log`, { flags: 'w' }),
+      });
+    } else if (env === 'production') {
+      return morgan(jsonFormat);
+    }
+    return morgan('dev+');
+  },
+});
