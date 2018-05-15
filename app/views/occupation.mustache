@@ -1,0 +1,57 @@
+{{<layout}}
+
+{{$applicationContent}}
+<section class="occupation-detail">
+  <header>
+    <h2 class="heading-large" data-test="occupation-title">{{occupation.title}}</h2>
+  </header>
+
+  <p id="occupation-description">{{occupation.description}}</p>
+
+  <div class="grid-row">
+    <div class="column-half">
+      <h3 class="heading-small">Kind of work you’d do</h3>
+      <ul class="list-bullet" data-test="occupation-tasks">
+        {{#occupation.tasks}}
+          <span data-test="occupation-task">
+            <li data-test="occupation-task-text">{{.}}</li>
+          </span>
+        {{/occupation.tasks}}
+      </ul>
+    </div>
+
+    <div class="column-half">
+      <h3 class="heading-small">Words to use in your online search</h3>
+      <em data-test="occupation-additional-titles">{{occupation.additionalTitles}}</em>
+    </div>
+  </div>
+
+  <div class="grid-row">
+    <div class="column-half">
+      <h3 class="heading-small">Qualifications you’ll need</h3>
+      <p id="occupation-qualifications">{{occupation.qualifications}}</p>
+    </div>
+    <div class="column-half">
+      <h3 class="heading-small">Your typical pay and hours</h3>
+      <ul>
+        <li data-test="occupation-week-hours">Around {{occupation.weekHours}} hours a week</li>
+        <li data-test="occupation-week-pay">Around £{{occupation.weekPay}} a week</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<form class="save-occupation-form" data-test="save-occupation-form">
+  <input type="hidden" name="socCode" value="{{occupation.soc}}">
+  <input type="hidden" name="fromQuery" value="{{fromQuery}}">
+  <input type="submit" class="button" value="Save" data-test="save-occupation">
+  <a class="button-secondary" href="{{basePath}}/{{accountId}}/occupationHowTo/{{occupation.soc}}?fromQuery={{fromQuery}}"
+     data-test="occupation-how-to">How do I use this?</a>
+</form>
+
+<p><a href="{{basePath}}/{{accountId}}/search?query={{fromQuery}}" class="link-back" data-test="back-to-search-results">Search results</a></p>
+
+{{/applicationContent}}
+
+{{/layout}}

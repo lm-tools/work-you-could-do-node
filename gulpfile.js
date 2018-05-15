@@ -96,7 +96,11 @@ gulp.task('server', () => {
 });
 
 gulp.task('watch', ['compile', 'server'], () => {
-  gulp.watch(['app/**/*.js', 'bin/www'], ['server']);
+  const serverFiles = ['app/**/*.js', 'bin/www'];
+  if (process.env.NODE_ENV === 'development') {
+    serverFiles.push('test/common/mocks/**/*.js');
+  }
+  gulp.watch(serverFiles, ['server']);
   gulp.watch('app/assets/stylesheets/*.scss', ['css']);
   gulp.watch('app/assets/js/**/*.js', ['browserify']);
 });

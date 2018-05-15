@@ -1,10 +1,8 @@
-class CookiePage {
-  constructor(browser) {
-    this.browser = browser;
-  }
+const Page = require('./page');
+class CookiePage extends Page {
 
   visit() {
-    return this.browser.visit('/cookie');
+    return this.browser.visit(this.routes.cookieUrl());
   }
 
   isDisplayed() {
