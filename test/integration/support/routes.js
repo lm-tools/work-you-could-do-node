@@ -3,7 +3,7 @@ class Routes {
     this.basePath = basePath;
     this.siteUrl = siteUrl;
   }
-  entrypointUrl(query='') {
+  entrypointUrl(query = '') {
     return `${this.basePath}${query}`;
   }
 

@@ -53,7 +53,4 @@ describe('Occupation', () => {
       text: 'How do I use this?',
     })
   );
-  it('should display breadcrumb tbi', () =>
-    expect(false).to.eql(true)
-  );
 });
