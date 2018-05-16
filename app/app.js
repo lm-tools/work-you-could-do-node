@@ -16,6 +16,8 @@ const healthCheckController = require('./controllers/health-check-controller');
 const helmet = require('helmet');
 const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
+const breadcrumb = require('./middleware/breadcrumb');
+const fetchAndSetOccupation = require('./middleware/fetch-occupation');
 
 const mocks = require('./../test/common/mocks');
 
@@ -60,6 +62,7 @@ app.use((req, res, next) => {
         '../../vendor/govuk_template_mustache_inheritance/views/layouts/govuk_template',
       googleTagManager: 'partials/google-tag-manager',
       appCookies: 'partials/app-cookies',
+      breadcrumb: 'partials/breadcrumb',
     },
   });
   next();
@@ -87,9 +90,10 @@ app.use(helmet.noCache());
 
 app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
-app.use(`${basePath}/:accountId/introduction`, introductionController);
-app.use(`${basePath}/:accountId/search`, searchController);
-app.use(`${basePath}/:accountId/occupation`, occupationController);
+app.use(`${basePath}/:accountId/introduction`, breadcrumb, introductionController);
+app.use(`${basePath}/:accountId/search`, breadcrumb, searchController);
+app.use(`${basePath}/:accountId/occupation/:id`, fetchAndSetOccupation, breadcrumb,
+  occupationController);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

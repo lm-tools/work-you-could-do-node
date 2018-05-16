@@ -25,35 +25,51 @@ describe('Occupation', () => {
     mock.hoursMock();
     return occupationPage.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
   });
+
   beforeEach(() => knexCleaner.clean(knex, { ignoreTables: ['knex_migrations'] }));
+
   after(() => mock.restore());
+
   it('should format tasks', () =>
     expect(occupationPage.getTasks())
       .to.eql(this.getSocMock.mockResponse(OCCUPATION_ID).tasks.split(';').map(
-        i => capitalizeFirstLetter(i.replace(/\r?\n|\r/g, '').trim())
+      i => capitalizeFirstLetter(i.replace(/\r?\n|\r/g, '').trim())
       )
     )
   );
+
   it('should format occupation-additional-titles', () =>
     expect(occupationPage.getAdditionalTitles())
       .to.eql(this.getSocMock.mockResponse(OCCUPATION_ID).add_titles.join('; '))
   );
+
   it('should display expected hours per week', () =>
     expect(occupationPage.getHoursPerWeek()).to.eql('Around 35 hours a week')
   );
+
   it('should display expected pay per week', () =>
     expect(occupationPage.getPayPerWeek()).to.eql('Around £1034 a week')
   );
+
   it('should display back link', () =>
     expect(occupationPage.getBackLink()).to.eql({
       href: routes.searchUrl(ACCOUNT_ID, FROM_QUERY),
       text: 'Search results',
     })
   );
+
   it('should display help link', () =>
     expect(occupationPage.getHelpLink()).to.eql({
       href: routes.occupationHowTo(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY),
       text: 'How do I use this?',
     })
   );
+
+  describe('breadcrumb', () => {
+    it('should show breadcrumb on the details page', () => {
+      expect(occupationPage.getBreadcrumbs())
+        .to.eql(['Introduction', 'Search', 'Results',
+        this.getSocMock.mockResponse(OCCUPATION_ID).title]);
+    });
+  });
 });

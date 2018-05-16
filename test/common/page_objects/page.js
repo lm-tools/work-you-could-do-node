@@ -82,5 +82,14 @@ class Page {
       .map(context => this.extractText(`${dataTest}-text`, context));
   }
 
+  /**
+   * Find array of breadcrumbs.
+   * @returns {*|Array}
+   */
+  getBreadcrumbs() {
+    const resources = this.browser.queryAll('[data-test="crumb"]');
+    return resources.map(crumb => this.extractText('title', crumb));
+  }
+
 }
 module.exports = Page;

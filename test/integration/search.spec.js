@@ -22,6 +22,12 @@ describe('Search', () => {
     it('should display search examples', () =>
       expect(searchPage.getText()).to.contain('e.g.')
     );
+
+    describe('breadcrumb', () => {
+      it('should show breadcrumb on the search page', () => {
+        expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search']);
+      });
+    });
   });
 
   describe('results', () => {
@@ -55,6 +61,11 @@ describe('Search', () => {
         href: routes.occupationUrl(account, r.soc, this.mockSearchQuery),
       })))
     );
+
+    describe('breadcrumb', () => {
+      it('should show breadcrumb on the search page', () => {
+        expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search', 'Results']);
+      });
+    });
   });
 });
-
