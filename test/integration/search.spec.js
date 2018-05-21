@@ -12,7 +12,7 @@ const routes = helper.routes;
 describe('Search', () => {
   const account = '109c346f-e64e-4bb5-9749-28dbbdfdfe55';
 
-  describe('no results', () => {
+  describe('new search', () => {
     before(() => searchPage.visit(account));
 
     it('should contain valid google tag manager data', () =>
@@ -26,6 +26,24 @@ describe('Search', () => {
     describe('breadcrumb', () => {
       it('should show breadcrumb on the search page', () => {
         expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search']);
+      });
+    });
+  });
+
+  describe('no results', () => {
+    before(() => searchPage.visit(account, ''));
+
+    it('should contain valid google tag manager data', () =>
+      expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller')
+    );
+
+    it('should display search examples', () =>
+      expect(searchPage.getText()).to.contain('e.g.')
+    );
+
+    describe('breadcrumb', () => {
+      it('should show breadcrumb on the search page', () => {
+        expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search', 'Results']);
       });
     });
   });

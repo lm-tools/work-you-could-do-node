@@ -1,44 +1,41 @@
-const breadcrumbModel = require('../../app/middleware/breadcrumb');
+const pages = require('../../app/pages');
+const breadcrumb = require('../../app/middleware/breadcrumb');
 
 const { describe, it } = require('mocha');
 const expect = require('chai').expect;
 
 describe('breadcrumb', () => {
-  const accountId = '21312213-1234124-3-123-12-321321';
+  const accountId = '0b91f2d0-8af8-40f1-81d6-1e45cd4fe3f5';
 
-  [
-    {
-      originalUrl: '/',
-    },
-    {
-      originalUrl: `/${accountId}/introduction`,
-      params: { accountId },
-    },
-  ].forEach(req => {
-    it(`should have no breadcrumb information for the root page with url '${req.originalUrl}'`,
-      () => {
-        const res = { locals: {} };
-        breadcrumbModel(req, res, () => {
-        });
-        expect(res.locals.trail).to.eql([]);
+  it('should set empty breadcrumb array if no page given',
+    () => {
+      const res = { locals: {} };
+      const returnedFunction = breadcrumb();
+      returnedFunction({}, res, () => {
       });
-  });
+      expect(res.locals.trail).to.eql([]);
+    }
+  );
 
-//  it('should display breadcrumbs for the not found page', () => {
-//    expect(breadcrumbModel(`/${accountId}/page-is-not-here`)).to.eql([
-//      { title: 'Introduction', link: `/${accountId}/introduction` },
-//      { title: 'Page not found' },
-//    ]);
-//  });
+  it('should set empty breadcrumb array if no page matches',
+    () => {
+      const res = { locals: {} };
 
-  it('should have breadcrumb information for the saved roles page', () => {
-    const req = {
-      originalUrl: `/${accountId}`,
-      params: { accountId },
-    };
+      const returnedFunction = breadcrumb(Symbol('noMatch'));
+      returnedFunction({}, res, () => {
+      });
+
+      expect(res.locals.trail).to.eql([]);
+    }
+  );
+
+  it('should set breadcrumb information adding the account id', () => {
+    const req = { params: { accountId } };
     const res = { locals: {} };
 
-    breadcrumbModel(req, res, () => {});
+    const returnedFunction = breadcrumb(pages.SAVED_ROLES);
+    returnedFunction(req, res, () => {
+    });
 
     expect(res.locals.trail).to.eql([
       { title: 'Introduction', link: `/${accountId}/introduction` },
@@ -47,62 +44,17 @@ describe('breadcrumb', () => {
     ]);
   });
 
-  it('should have breadcrumb information for the new search page', () => {
+  it('should set breadcrumb information adding the search query and occupation title', () => {
     const req = {
-      originalUrl: `/${accountId}/search/new`,
-      params: { accountId },
-    };
-    const res = { locals: {} };
-
-    breadcrumbModel(req, res, () => {});
-
-    expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
-      { title: 'Search' },
-    ]);
-  });
-
-  it('should have breadcrumb information for the search page without the "/new" suffix', () => {
-    const req = {
-      originalUrl: `/${accountId}/search`,
-      params: { accountId },
-    };
-    const res = { locals: {} };
-
-    breadcrumbModel(req, res, () => {});
-
-    expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
-      { title: 'Search' },
-    ]);
-  });
-
-  it('should have breadcrumb information for the results page', () => {
-    const req = {
-      originalUrl: `/${accountId}/search?query=Retail`,
-      params: { accountId },
-    };
-    const res = { locals: {} };
-
-    breadcrumbModel(req, res, () => {});
-
-    expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
-      { title: 'Search', link: `/${accountId}/search/new` },
-      { title: 'Results' },
-    ]);
-  });
-
-  it('should have breadcrumb information for the occupations page', () => {
-    const req = {
-      originalUrl: `/${accountId}/occupation/1190?fromQuery=Retail`,
       params: { accountId, id: 1190 },
       query: { fromQuery: 'Retail' },
       occupation: { title: 'Managers and directors in retail and wholesale' },
     };
     const res = { locals: {} };
 
-    breadcrumbModel(req, res, () => {});
+    const returnedFunction = breadcrumb(pages.OCCUPATION);
+    returnedFunction(req, res, () => {
+    });
 
     expect(res.locals.trail).to.eql([
       { title: 'Introduction', link: `/${accountId}/introduction` },
@@ -112,16 +64,17 @@ describe('breadcrumb', () => {
     ]);
   });
 
-  it('should have breadcrumb information for the occupations how to page', () => {
+  it('should set breadcrumb information adding the soc code', () => {
     const req = {
-      originalUrl: `/${accountId}/occupation_how_to/1190?fromQuery=Retail`,
       params: { accountId, id: 1190 },
       query: { fromQuery: 'Retail' },
       occupation: { title: 'Managers and directors in retail and wholesale' },
     };
     const res = { locals: {} };
 
-    breadcrumbModel(req, res, () => {});
+    const returnedFunction = breadcrumb(pages.HOW_TO);
+    returnedFunction(req, res, () => {
+    });
 
     expect(res.locals.trail).to.eql([
       { title: 'Introduction', link: `/${accountId}/introduction` },
@@ -134,4 +87,19 @@ describe('breadcrumb', () => {
       { title: 'How-to' },
     ]);
   });
-});
+
+  it('should set breadcrumb information for the not found page', () => {
+    const req = { params: { accountId } };
+    const res = { locals: {} };
+
+    const returnedFunction = breadcrumb(pages.NOT_FOUND);
+    returnedFunction(req, res, () => {
+    });
+
+    expect(res.locals.trail).to.eql([
+      { title: 'Introduction', link: `/${accountId}/introduction` },
+      { title: 'Page not found' },
+    ]);
+  });
+})
+;

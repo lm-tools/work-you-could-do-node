@@ -16,6 +16,7 @@ const healthCheckController = require('./controllers/health-check-controller');
 const helmet = require('helmet');
 const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
+const pages = require('./pages');
 const breadcrumb = require('./middleware/breadcrumb');
 const fetchAndSetOccupation = require('./middleware/fetch-occupation');
 
@@ -90,13 +91,12 @@ app.use(helmet.noCache());
 
 app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
-app.use(`${basePath}/:accountId/introduction`, breadcrumb, introductionController);
-app.use(`${basePath}/:accountId/search`, breadcrumb, searchController);
-app.use(`${basePath}/:accountId/occupation/:id`, fetchAndSetOccupation, breadcrumb,
-  occupationController);
+app.use(`${basePath}/:accountId/introduction`, introductionController);
+app.use(`${basePath}/:accountId/search`, searchController);
+app.use(`${basePath}/:accountId/occupation/:id`, fetchAndSetOccupation, occupationController);
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+app.use(breadcrumb(pages.NOT_FOUND), (req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);

@@ -1,8 +1,6 @@
-class ErrorPage {
-  constructor(browser) {
-    this.browser = browser;
-  }
+const Page = require('./page');
 
+class ErrorPage extends Page {
   getMessage() {
     return this.browser.text('[data-test="message"]');
   }

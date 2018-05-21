@@ -3,6 +3,7 @@ class Routes {
     this.basePath = basePath;
     this.siteUrl = siteUrl;
   }
+
   entrypointUrl(query = '') {
     return `${this.basePath}${query}`;
   }
@@ -16,12 +17,17 @@ class Routes {
   }
 
   searchUrl(accountId, query) {
-    const q = query ? `?query=${encodeURIComponent(query)}` : '';
-    return `${this.basePath}/${accountId}/search${q}`;
-  }
+    let path = '';
 
-  searchUrlAbsolute(search) {
-    return `${this.siteUrl}${this.basePath}/search?query=${encodeURIComponent(search)}`;
+    if (query === undefined) {
+      path = '/new';
+    }
+
+    if (query) {
+      path = `?query=${encodeURIComponent(query)}`;
+    }
+
+    return `${this.basePath}/${accountId}/search${path}`;
   }
 
   occupationUrl(accountId, socCode, fromQuery) {

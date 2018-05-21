@@ -23,5 +23,11 @@ describe('Error handling', () => {
     it('should contain valid google tag manager data', () =>
       expect(googleTagManagerHelper.getUserVariable()).to.exists
     );
+
+    describe('breadcrumb', () => {
+      it('should show breadcrumb on the details page', () => {
+        expect(errorPage.getBreadcrumbs()).to.eql(['Introduction', 'Page not found']);
+      });
+    });
   });
 });

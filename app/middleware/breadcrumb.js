@@ -1,13 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-
-const Pages = Object.freeze({
-  INTRODUCTION: Symbol('introduction'),
-  SEARCH: Symbol('search'),
-  RESULTS: Symbol('results'),
-  OCCUPATION: Symbol('occupations'),
-  HOW_TO: Symbol('howTo'),
-  SAVED_ROLES: Symbol('savedRoles'),
-});
+const pages = require('../pages');
 
 const replacements = {
   accountId: ':accountId',
@@ -16,47 +8,34 @@ const replacements = {
   occupationTitle: ':occupationTitle',
 };
 
-const urlToPageAndBreadcrumbTrail = [
-  {
-    urlRegex: /\/?[A-Fa-f\d-]+$/, pageName: Pages.SAVED_ROLES,
-    breadcrumbTrail: [Pages.INTRODUCTION, Pages.SEARCH],
-  },
-  {
-    urlRegex: /\/search(?:\/new)?(?!\?query=)/, pageName: Pages.SEARCH,
-    breadcrumbTrail: [Pages.INTRODUCTION],
-  },
-  {
-    urlRegex: /\/search\?query=/, pageName: Pages.RESULTS,
-    breadcrumbTrail: [Pages.INTRODUCTION, Pages.SEARCH],
-  },
-  {
-    urlRegex: /\/occupation\/[0-9]+/, pageName: Pages.OCCUPATION,
-    breadcrumbTrail: [Pages.INTRODUCTION, Pages.SEARCH, Pages.RESULTS],
-  },
-  {
-    urlRegex: /\/occupation_how_to\/[0-9]+/, pageName: Pages.HOW_TO,
-    breadcrumbTrail: [Pages.INTRODUCTION, Pages.SEARCH, Pages.RESULTS, Pages.OCCUPATION],
-  },
-];
+const pageToBreadcrumbTrail = {
+  [pages.SAVED_ROLES]: [pages.INTRODUCTION, pages.SEARCH],
+  [pages.SEARCH]: [pages.INTRODUCTION],
+  [pages.RESULTS]: [pages.INTRODUCTION, pages.SEARCH],
+  [pages.OCCUPATION]: [pages.INTRODUCTION, pages.SEARCH, pages.RESULTS],
+  [pages.HOW_TO]: [pages.INTRODUCTION, pages.SEARCH, pages.RESULTS, pages.OCCUPATION],
+  [pages.NOT_FOUND]: [pages.INTRODUCTION],
+};
 
 const pageToBreadcrumb = {
-  [Pages.INTRODUCTION]: { title: 'Introduction', link: `/${replacements.accountId}/introduction` },
-  [Pages.SEARCH]: { title: 'Search', link: `/${replacements.accountId}/search/new` },
-  [Pages.RESULTS]: {
+  [pages.INTRODUCTION]: { title: 'Introduction', link: `/${replacements.accountId}/introduction` },
+  [pages.SEARCH]: { title: 'Search', link: `/${replacements.accountId}/search/new` },
+  [pages.RESULTS]: {
     title: 'Results',
     link: `/${replacements.accountId}/search?query=${replacements.fromQuery}`,
   },
-  [Pages.OCCUPATION]: {
+  [pages.OCCUPATION]: {
     title: replacements.occupationTitle,
     link: `/${replacements.accountId}/occupations/${replacements.socCode}` +
-      `?fromQuery=${replacements.fromQuery}`,
+    `?fromQuery=${replacements.fromQuery}`,
   },
-  [Pages.HOW_TO]: {
+  [pages.HOW_TO]: {
     title: 'How-to',
     link: `/${replacements.accountId}/occupation_how_to/${replacements.socCode}
       ?fromQuery=${replacements.fromQuery}`,
   },
-  [Pages.SAVED_ROLES]: { title: 'Saved roles', link: '/:accountId' },
+  [pages.SAVED_ROLES]: { title: 'Saved roles', link: '/:accountId' },
+  [pages.NOT_FOUND]: { title: 'Page not found', link: '/${replacements.accountId}/introduction' },
 };
 
 const removeLink = (crumb) => {
@@ -65,54 +44,49 @@ const removeLink = (crumb) => {
   return clonedCrumb;
 };
 
-module.exports = (req, res, next) => {
-  const url = req.originalUrl;
-  const accountId = req.params && req.params.accountId;
-  const socCode = req.params && req.params.id;
-  const fromQuery = req.query && req.query.fromQuery;
-  const title = req.occupation && req.occupation.title;
+module.exports = (currentPage) =>
+  (req, res, next) => {
+    const breadcrumbs = [];
+    const breadcrumbTrail = pageToBreadcrumbTrail[currentPage];
 
-  const breadcrumbs = [];
-  const pageAndBreadcrumbTrail = urlToPageAndBreadcrumbTrail.find(o => url.match(o.urlRegex));
+    if (breadcrumbTrail) {
+      breadcrumbTrail.forEach(page => breadcrumbs.push(Object.assign({}, pageToBreadcrumb[page])));
 
-  if (pageAndBreadcrumbTrail) {
-    const currentPage = pageAndBreadcrumbTrail.pageName;
-    const breadcrumbTrail = pageAndBreadcrumbTrail.breadcrumbTrail;
+      breadcrumbs.push(Object.assign({}, pageToBreadcrumb[currentPage]));
+    }
 
-    breadcrumbTrail.forEach(page => breadcrumbs.push(Object.assign({}, pageToBreadcrumb[page])));
+    const accountId = req.params && req.params.accountId;
+    if (accountId !== undefined) {
+      breadcrumbs.map(crumb =>
+        Object.assign(crumb, { link: crumb.link.replace(replacements.accountId, accountId) })
+      );
+    }
 
-    breadcrumbs.push(Object.assign({}, pageToBreadcrumb[currentPage]));
-  }
+    const fromQuery = req.query && req.query.fromQuery;
+    if (fromQuery !== undefined) {
+      breadcrumbs.map(crumb =>
+        Object.assign(crumb, { link: crumb.link.replace(replacements.fromQuery, fromQuery) })
+      );
+    }
 
-  if (accountId !== undefined) {
-    breadcrumbs.map(crumb =>
-      Object.assign(crumb, { link: crumb.link.replace(replacements.accountId, accountId) })
-    );
-  }
+    const socCode = req.params && req.params.id;
+    if (socCode !== undefined) {
+      breadcrumbs.map(crumb =>
+        Object.assign(crumb, { link: crumb.link.replace(replacements.socCode, socCode) })
+      );
+    }
 
-  if (fromQuery !== undefined) {
-    breadcrumbs.map(crumb =>
-      Object.assign(crumb, { link: crumb.link.replace(replacements.fromQuery, fromQuery) })
-    );
-  }
+    const title = req.occupation && req.occupation.title;
+    if (title !== undefined) {
+      breadcrumbs.map(crumb =>
+        Object.assign(crumb, { title: crumb.title.replace(replacements.occupationTitle, title) })
+      );
+    }
 
-  if (socCode !== undefined) {
-    breadcrumbs.map(crumb =>
-      Object.assign(crumb, { link: crumb.link.replace(replacements.socCode, socCode) })
-    );
-  }
+    if (breadcrumbs.length !== 0) {
+      breadcrumbs[breadcrumbs.length - 1] = removeLink(breadcrumbs[breadcrumbs.length - 1]);
+    }
 
-  if (title !== undefined) {
-    breadcrumbs.map(crumb =>
-      Object.assign(crumb, { title: crumb.title.replace(replacements.occupationTitle, title) })
-    );
-  }
-
-  if (breadcrumbs.length !== 0) {
-    breadcrumbs[breadcrumbs.length - 1] = removeLink(breadcrumbs[breadcrumbs.length - 1]);
-  }
-
-  Object.assign(res.locals, { trail: breadcrumbs });
-  next();
-}
-;
+    Object.assign(res.locals, { trail: breadcrumbs });
+    next();
+  };
