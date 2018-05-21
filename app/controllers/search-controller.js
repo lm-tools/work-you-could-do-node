@@ -1,6 +1,7 @@
 const express = require('express');
 const router = new express.Router({ mergeParams: true });
-const lmiClient = require('./../services/lmi-client-service');
+const appContext = require('./../appContext');
+const lmiClient = appContext.lmiClient;
 
 /* GET home page. */
 router.get('/new', (req, res) => {
@@ -10,10 +11,10 @@ router.get('/new', (req, res) => {
 router.get('/', (req, res) => {
   const query = req.query.query;
   lmiClient.searchSoc(query)
-    .then((response) => res.render('search', {
+    .then(searchResults => res.render('search', {
       accountId: req.params.accountId,
       query: req.query.query,
-      searchResults: JSON.parse(response.body),
+      searchResults,
     }));
 });
 

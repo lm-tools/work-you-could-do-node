@@ -7,6 +7,8 @@ const before = helper.before;
 const after = helper.after;
 const it = helper.it;
 const routes = helper.routes;
+const knexCleaner = helper.knexCleaner;
+const knex = helper.knex;
 
 const ACCOUNT_ID = 4567189203921863;
 const OCCUPATION_ID = 4235;
@@ -23,6 +25,7 @@ describe('Occupation', () => {
     mock.hoursMock();
     return occupationPage.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
   });
+  beforeEach(() => knexCleaner.clean(knex, { ignoreTables: ['knex_migrations'] }));
   after(() => mock.restore());
   it('should format tasks', () =>
     expect(occupationPage.getTasks())
