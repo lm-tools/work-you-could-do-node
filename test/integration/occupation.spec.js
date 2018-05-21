@@ -56,4 +56,13 @@ describe('Occupation', () => {
       text: 'How do I use this?',
     })
   );
+  describe('saved-occupations', () => {
+    before(() => occupationPage.clickSave());
+    it('should redirect to the occupation saved page', () => {
+      expect(occupationPage.getSavedOccupationBoxTitle())
+        .to.eql('Library clerks and assistants - 4235 saved');
+      expect(occupationPage.getSavedOccupationBoxSavedRolesLink())
+        .to.eql(routes.savedRoles(ACCOUNT_ID));
+    });
+  });
 });

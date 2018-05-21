@@ -42,10 +42,24 @@
 
 </section>
 
-<form class="save-occupation-form" data-test="save-occupation-form">
+{{#savedOccupation}}
+  <div data-test="saved-occupation" class="information-box">
+    <p data-test="saved-occupation-title">
+      {{occupation.title}} saved
+    </p>
+    <p>
+      <a href="{{basePath}}/{{accountId}}" data-test="saved-occupation-link">Saved roles</a>
+    </p>
+    <p></p>
+  </div>
+{{/savedOccupation}}
+
+<form class="save-occupation-form" data-test="save-occupation-form" method="post">
   <input type="hidden" name="socCode" value="{{occupation.soc}}">
   <input type="hidden" name="fromQuery" value="{{fromQuery}}">
+  {{^savedOccupation}}
   <input type="submit" class="button" value="Save" data-test="save-occupation">
+  {{/savedOccupation}}
   <a class="button-secondary" href="{{basePath}}/{{accountId}}/occupationHowTo/{{occupation.soc}}?fromQuery={{fromQuery}}"
      data-test="occupation-how-to">How do I use this?</a>
 </form>

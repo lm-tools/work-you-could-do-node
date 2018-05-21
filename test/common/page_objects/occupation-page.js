@@ -29,6 +29,18 @@ class OccupationPage extends Page {
     return this.extractLink(('occupation-how-to'));
   }
 
+  getSavedOccupationBoxTitle() {
+    return this.extractText('saved-occupation-title');
+  }
+
+  getSavedOccupationBoxSavedRolesLink() {
+    return this.extractLink('saved-occupation-link').href;
+  }
+
+  clickSave() {
+    return this.click('save-occupation');
+  }
+
 }
 
 module.exports = OccupationPage;

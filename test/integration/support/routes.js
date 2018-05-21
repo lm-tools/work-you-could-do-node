@@ -32,6 +32,10 @@ class Routes {
   occupationHowTo(accountId, socCode, fromQuery) {
     return `${this.basePath}/${accountId}/occupationHowTo/${socCode}?fromQuery=${fromQuery}`;
   }
+
+  savedRoles(accountId) {
+    return `${this.basePath}/${accountId}`;
+  }
 }
 
 module.exports = Routes;

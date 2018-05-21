@@ -82,5 +82,22 @@ class Page {
       .map(context => this.extractText(`${dataTest}-text`, context));
   }
 
+  /**
+   * clicks the matching dataTest element
+   * @param dataTest element
+   * returns this.browser.click promise
+   */
+  click(dataTest) {
+    return this.browser.click(this.dataTestElement(dataTest));
+  }
+
+  /**
+   * @param d
+   * @returns {string} data test element matcher
+   */
+  dataTestElement(d) {
+    return `[data-test="${d}"]`;
+  }
+
 }
 module.exports = Page;
