@@ -1,47 +1,83 @@
 const config = require('./../config/index');
 const request = require('request-promise-native');
 const crypto = require('crypto');
+const OccupationCache = require('./../models/occupation-cache-model');
+
+const filterObjectByKeys = function (body, keepProperties) {
+  return Object.keys(body)
+    .filter(key => keepProperties.includes(key))
+    .reduce((accumulator, value) => {
+      const obj = {};
+      obj[value] = body[value];
+      return Object.assign(accumulator, obj);
+    }, {});
+};
 
 class LmiClient {
 
-  constructor() {
-    this.secretKey = config.lmi_secret_key;
-    this.keyId = config.lmi_key_id;
-    this.lmiBaseUri = config.lmiBaseUri;
+  constructor({ lmiSecretKey, lmiKeyId, lmiBaseUri }) {
+    this.secretKey = lmiSecretKey;
+    this.keyId = lmiKeyId;
+    this.lmiBaseUri = lmiBaseUri;
   }
 
   /**
    *
    * @param keyword
-   * @returns soc: Standard Occupational Classification
+   * @returns soc Array: Standard Occupational Classification
    */
   searchSoc(keyword) {
     return request.get(`${this.lmiBaseUri}/soc/search?q=${keyword}`, {
       headers: this.generateHmacHeadersNow(),
       insecure: config.env === 'test',
       resolveWithFullResponse: true,
-    });
+    }).then(r =>
+      r.body && JSON.parse(r.body)
+    );
   }
 
   getSoc(socCode) {
-    return this.lmiGetRequest(`/soc/code/${socCode}`)
-      .then(r => {
-        const body = r.body && JSON.parse(r.body);
-        if (!body) {
-          throw new Error(`${socCode} not found`);
+    return this.lmiGetRequest(`/soc/code/${socCode}`);
+  }
+
+  getOccupation(socCode) {
+    return OccupationCache.findBySocId(socCode)
+      .then(cachedOccupation => {
+        if (!cachedOccupation) {
+          let occupation;
+          return Promise.all([
+            this.getSoc(socCode),
+            this.getWeekHours(socCode),
+            this.getWeekPay(socCode),
+          ]).then(([soc, weekHours, weekPay]) => {
+            occupation = this.toOccupationCacheDTO(socCode, soc, weekHours, weekPay);
+            return new OccupationCache(occupation).save();
+          }).then(() => occupation);
         }
-        return body;
+        return cachedOccupation;
       });
   }
 
-  getHours(socCode) {
+  getWeekHours(socCode) {
     return this.lmiGetRequest(`/ashe/estimateHours?soc=${socCode}&coarse=true`)
       .then(response => this.handleAsheResponse(response, socCode, 'hours'));
   }
 
-  getPay(socCode) {
+  getWeekPay(socCode) {
     return this.lmiGetRequest(`/ashe/estimatePay?soc=${socCode}`)
       .then(response => this.handleAsheResponse(response, socCode, 'estpay'));
+  }
+
+  toOccupationCacheDTO(socCode, soc, weekHours, weekPay) {
+    const body = soc.body && JSON.parse(soc.body);
+    if (!body) {
+      throw new Error(`${socCode} not found`);
+    }
+    body.additionalTitles = body.add_titles.join('; ');
+    body.tasks = body.tasks.replace(/\r?\n|\r/g, '').trim();
+    body.weekHours = weekHours;
+    body.weekPay = weekPay;
+    return filterObjectByKeys(body, OccupationCache.columns);
   }
 
   lmiGetRequest(endpoint) {
@@ -75,4 +111,4 @@ class LmiClient {
   }
 }
 
-module.exports = new LmiClient();
+module.exports = LmiClient;

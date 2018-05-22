@@ -27,6 +27,7 @@ module.exports = {
   getSocMock,
   hoursMock,
   payMock,
+  searchMock,
   mockAll: () => {
     getSocMock();
     searchMock();

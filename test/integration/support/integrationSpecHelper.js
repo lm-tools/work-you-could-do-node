@@ -7,6 +7,8 @@ const screenshots = require('./screenshots');
 const GoogleTagManagerHelper = require('../../common/page_objects/google-tag-manager-helper');
 const expect = require('chai').expect;
 const { describe, it, before, after } = require('mocha');
+const knex = require('../../../app/db').knex;
+const knexCleaner = require('knex-cleaner');
 const MainPage = require('../../common/page_objects/main-page');
 const ErrorPage = require('../../common/page_objects/error-page');
 const CookiePage = require('../../common/page_objects/cookie-page');
@@ -44,6 +46,8 @@ module.exports = {
   it,
   before,
   after,
+  knex,
+  knexCleaner,
   routes,
   basePath,
 };
