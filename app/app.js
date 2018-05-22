@@ -18,7 +18,6 @@ const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
 const pages = require('./pages');
 const breadcrumb = require('./middleware/breadcrumb');
-const fetchAndSetOccupation = require('./middleware/fetch-occupation');
 
 const mocks = require('./../test/common/mocks');
 
@@ -93,7 +92,7 @@ app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
 app.use(`${basePath}/:accountId/introduction`, introductionController);
 app.use(`${basePath}/:accountId/search`, searchController);
-app.use(`${basePath}/:accountId/occupation/:id`, fetchAndSetOccupation, occupationController);
+app.use(`${basePath}/:accountId/occupation`, occupationController);
 
 // catch 404 and forward to error handler
 app.use(breadcrumb(pages.NOT_FOUND), (req, res, next) => {

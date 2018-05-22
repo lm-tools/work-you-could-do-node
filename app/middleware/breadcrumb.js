@@ -40,51 +40,40 @@ const pageToBreadcrumb = {
 
 const cloneBreadcrumb = crumb => Object.assign({}, crumb);
 
-const removeLink = (crumb) => {
-  const clonedCrumb = Object.assign({}, crumb);
-  delete clonedCrumb.link;
-  return clonedCrumb;
-};
+const isLastElement = (i, arr) => i === arr.length - 1;
 
 module.exports = (currentPage) =>
   (req, res, next) => {
-    const trail = [];
-    const breadcrumbTrail = pageToBreadcrumbTrail[currentPage];
-
-    if (breadcrumbTrail) {
-      breadcrumbTrail.forEach(page => trail.push(cloneBreadcrumb(pageToBreadcrumb[page])));
-
-      trail.push(cloneBreadcrumb(pageToBreadcrumb[currentPage]));
-    }
-
     const accountId = req.params && req.params.accountId;
     const fromQuery = req.query && req.query.fromQuery;
     const socCode = req.params && req.params.id;
     const occupationTitle = req.occupation && req.occupation.title;
 
-    trail.forEach(crumb => {
-      let link = crumb.link;
-      let title = crumb.title;
+    const breadcrumbTrail = pageToBreadcrumbTrail[currentPage];
+    let trail = [];
 
-      if (accountId) {
-        link = link.replace(replacements.accountId, accountId);
-      }
-      if (fromQuery) {
-        link = link.replace(replacements.fromQuery, fromQuery);
-      }
-      if (socCode) {
-        link = link.replace(replacements.socCode, socCode);
-      }
-      if (title) {
-        title = title.replace(replacements.occupationTitle, occupationTitle);
-      }
+    if (breadcrumbTrail) {
+      trail = [...breadcrumbTrail, currentPage]
+        .map(page => cloneBreadcrumb(pageToBreadcrumb[page]))
+        .map((crumb, index, arr) => {
+          let link = crumb.link;
+          let title = crumb.title;
 
-      Object.assign(crumb, { title, link });
-    });
+          if (accountId) {
+            link = link.replace(replacements.accountId, accountId);
+          }
+          if (fromQuery) {
+            link = link.replace(replacements.fromQuery, fromQuery);
+          }
+          if (socCode) {
+            link = link.replace(replacements.socCode, socCode);
+          }
+          if (title) {
+            title = title.replace(replacements.occupationTitle, occupationTitle);
+          }
 
-    if (trail.length !== 0) {
-      const lastCrumb = trail.length - 1;
-      trail[lastCrumb] = removeLink(trail[lastCrumb]);
+          return isLastElement(index, arr) ? { title } : { title, link };
+        });
     }
 
     Object.assign(res.locals, { trail });
