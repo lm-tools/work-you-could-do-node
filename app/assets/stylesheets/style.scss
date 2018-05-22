@@ -53,3 +53,8 @@ a.search-result {
     margin-top: $gutter-half;
   }
 }
+
+.information-box {
+  @extend .error-summary;
+  border: 5px solid $govuk-blue;
+}
