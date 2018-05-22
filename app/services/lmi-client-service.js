@@ -3,9 +3,9 @@ const request = require('request-promise-native');
 const crypto = require('crypto');
 const OccupationCache = require('./../models/occupation-cache-model');
 
-const filterObjectByKeys = function (body, keys) {
+const filterObjectByKeys = function (body, keepProperties) {
   return Object.keys(body)
-    .filter(key => keys.indexOf(key) > -1)
+    .filter(key => keepProperties.includes(key))
     .reduce((accumulator, value) => {
       const obj = {};
       obj[value] = body[value];

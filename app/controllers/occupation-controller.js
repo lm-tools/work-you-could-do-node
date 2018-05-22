@@ -6,7 +6,7 @@ const capitalizeFirstLetter = string =>
   string.charAt(0).toUpperCase() + string.slice(1);
 
 const occupationViewModel = occupation => Object.assign(occupation, {
-  tasks: occupation.tasks.split('; ').map(s => capitalizeFirstLetter(s)),
+  tasks: occupation.tasks.split('; ').map(capitalizeFirstLetter),
 });
 
 /* GET home page. */
