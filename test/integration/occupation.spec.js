@@ -9,8 +9,9 @@ const it = helper.it;
 const routes = helper.routes;
 const knexCleaner = helper.knexCleaner;
 const knex = helper.knex;
+const SavedOccupations = require('./../../app/models/saved-occupation-model');
 
-const ACCOUNT_ID = 4567189203921863;
+const ACCOUNT_ID = 'b7be5584-5d09-11e8-9c2d-fa7ae01bbebc';
 const OCCUPATION_ID = 4235;
 const FROM_QUERY = 'Retail';
 
@@ -25,12 +26,12 @@ describe('Occupation', () => {
     mock.hoursMock();
     return occupationPage.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
   });
-  beforeEach(() => knexCleaner.clean(knex, { ignoreTables: ['knex_migrations'] }));
+  before(() => knexCleaner.clean(knex, { ignoreTables: ['knex_migrations'] }));
   after(() => mock.restore());
   it('should format tasks', () =>
     expect(occupationPage.getTasks())
       .to.eql(this.getSocMock.mockResponse(OCCUPATION_ID).tasks.split(';').map(
-        i => capitalizeFirstLetter(i.replace(/\r?\n|\r/g, '').trim())
+      i => capitalizeFirstLetter(i.replace(/\r?\n|\r/g, '').trim())
       )
     )
   );
@@ -64,5 +65,31 @@ describe('Occupation', () => {
       expect(occupationPage.getSavedOccupationBoxSavedRolesLink())
         .to.eql(routes.savedRoles(ACCOUNT_ID));
     });
+    it('should add the occupations to the db', () =>
+      occupationPage.visit(ACCOUNT_ID, 4236, FROM_QUERY)
+        .then(() => occupationPage.clickSave())
+        .then(() => SavedOccupations.findByAccountId(ACCOUNT_ID))
+        .then(results => expect(results
+          .map(r => ({ soc: r.soc, accountId: r.accountId })))
+          .to.eql([
+            {
+              accountId: ACCOUNT_ID,
+              soc: 4235,
+            },
+            {
+              accountId: ACCOUNT_ID,
+              soc: 4236,
+            },
+          ])
+        )
+    );
+    it('should allow users to save the same role twice', () =>
+      occupationPage.visit(ACCOUNT_ID, 4236, FROM_QUERY)
+        .then(() => occupationPage.clickSave())
+        .then(() =>
+          expect(occupationPage.getSavedOccupationBoxTitle())
+            .to.eql('Library clerks and assistants - 4236 saved')
+        )
+    );
   });
 });
