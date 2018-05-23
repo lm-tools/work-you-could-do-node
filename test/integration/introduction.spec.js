@@ -6,7 +6,7 @@ const expect = require('chai').expect;
 describe('Introduction', () => {
   const account = '6a9c346f-e64e-4bb5-9749-28dbbdfdfe55';
 
-  before(() => Page.visit(account));
+  before(() => introductionPage.visit(account));
 
   it('should contain valid google tag manager data', () =>
     expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller')
@@ -24,7 +24,7 @@ describe('Introduction', () => {
   );
 
   describe('breadcrumb', () => {
-    before(() => Page.visit(account));
+    before(() => introductionPage.visit(account));
 
     it('should not show breadcrumb on the homepage', () =>
       expect(introductionPage.getBreadcrumbs()).to.eql([])

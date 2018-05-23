@@ -2,7 +2,7 @@ const Page = require('./page');
 class CookiePage extends Page {
 
   visit() {
-    return Page.visit(this.routes.cookieUrl());
+    return this.browser.visit(this.routes.cookieUrl());
   }
 
   isDisplayed() {

@@ -14,7 +14,7 @@ describe('Search', () => {
   const account = '109c346f-e64e-4bb5-9749-28dbbdfdfe55';
 
   describe('new search', () => {
-    before(() => Page.visit(account));
+    before(() => searchPage.visit(account));
 
     it('should contain valid google tag manager data', () =>
       expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller')
@@ -35,7 +35,7 @@ describe('Search', () => {
   });
 
   describe('no results', () => {
-    before(() => Page.visit(account, ''));
+    before(() => searchPage.visit(account, ''));
 
     it('should contain valid google tag manager data', () =>
       expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller')
@@ -72,7 +72,7 @@ describe('Search', () => {
           q: this.mockSearchQuery,
         })
         .reply(200, this.mockedResponse);
-      return Page.visit(account, 'MockedRetail');
+      return searchPage.visit(account, 'MockedRetail');
     });
     after(() => nock.restore());
 

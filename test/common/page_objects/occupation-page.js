@@ -2,7 +2,7 @@ const Page = require('./page.js');
 
 class OccupationPage extends Page {
   visit(account, occupationId, fromQuery) {
-    return Page.visit(this.routes.occupationUrl(account, occupationId, fromQuery));
+    return this.browser.visit(this.routes.occupationUrl(account, occupationId, fromQuery));
   }
 
   getTasks() {

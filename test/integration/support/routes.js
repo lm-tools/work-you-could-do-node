@@ -1,5 +1,5 @@
 class Routes {
-  constructor(basePath, siteUrl) {
+  constructor(basePath) {
     this.basePath = basePath;
   }
 

@@ -23,7 +23,7 @@ describe('Occupation', () => {
     this.getSocMock = mock.getSocMock();
     mock.payMock();
     mock.hoursMock();
-    return Page.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
+    return occupationPage.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
   });
 
   beforeEach(() => knexCleaner.clean(knex, { ignoreTables: ['knex_migrations'] }));

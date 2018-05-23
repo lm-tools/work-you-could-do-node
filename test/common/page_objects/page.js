@@ -5,7 +5,7 @@ class Page {
     this.routes = routes;
   }
   // eslint-disable-next-line no-unused-vars
-  static visit(...args) {
+  visit(...args) {
     throw new Error('Must implement the visit method');
   }
 
@@ -16,10 +16,10 @@ class Page {
    * returns the text within the element
    */
   extractText(dataTest = '', context = this.browser) {
-    return this.browser.text(Page.dataTestEl(dataTest), context);
+    return this.browser.text(this.dataTestEl(dataTest), context);
   }
 
-  static dataTestEl(dataTest) {
+  dataTestEl(dataTest) {
     return dataTest ? `[data-test="${dataTest}"]` : '';
   }
 
@@ -30,7 +30,7 @@ class Page {
    * returns the text within the element
    */
   extractLink(dataTest, context = this.browser) {
-    const href = this.browser.query(Page.dataTestEl(dataTest), context).getAttribute('href');
+    const href = this.browser.query(this.dataTestEl(dataTest), context).getAttribute('href');
     const text = this.extractText(dataTest, context);
     return { href, text };
   }

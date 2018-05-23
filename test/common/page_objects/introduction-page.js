@@ -2,7 +2,7 @@ const Page = require('./page');
 
 class IntroductionPage extends Page {
   visit(account) {
-    return Page.visit(this.routes.introductionUrl(account));
+    return this.browser.visit(this.routes.introductionUrl(account));
   }
 
   getText() {
