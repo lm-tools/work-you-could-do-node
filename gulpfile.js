@@ -13,6 +13,7 @@ const http = require('http');
 const rev = require('gulp-rev');
 const revDelOriginal = require('gulp-rev-delete-original');
 const debug = require('gulp-debug');
+const modifyCssUrls = require('gulp-modify-css-urls');
 let node;
 
 gulp.task('lint-all-html', () => {
@@ -65,6 +66,11 @@ gulp.task('css', () =>
           'node_modules/govuk-elements-sass/public/sass',
         ],
       }))
+    .pipe(modifyCssUrls({
+      modify(url) {
+        return url.replace('..', '../vendor/v1');
+      },
+    }))
     .pipe(gulp.dest('dist/public/stylesheets/'))
 );
 
@@ -82,8 +88,13 @@ gulp.task('revision:rename', ['js', 'css'], () =>
     .pipe(gulp.dest('./dist/public'))
 );
 
-gulp.task('compile', ['revision:rename']);
+gulp.task('compile', ['vendor-assets', 'revision:rename']);
 
+gulp.task('vendor-assets', () => {
+  gulp.src([
+    'node_modules/govuk_frontend_toolkit/images/*.png',
+  ]).pipe(gulp.dest('vendor/govuk_frontend_toolkit/assets/images'));
+});
 
 gulp.task('server', () => {
   if (node) node.kill();

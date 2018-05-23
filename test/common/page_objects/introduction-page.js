@@ -5,10 +5,6 @@ class IntroductionPage extends Page {
     return this.browser.visit(this.routes.introductionUrl(account));
   }
 
-  getText() {
-    return this.browser.text('#content');
-  }
-
   clickNext() {
     return this.browser.click('[data-test="next"]');
   }

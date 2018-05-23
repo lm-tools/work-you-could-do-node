@@ -4,9 +4,14 @@ class Page {
     this.browser = browser;
     this.routes = routes;
   }
+
   // eslint-disable-next-line no-unused-vars
   visit(...args) {
     throw new Error('Must implement the visit method');
+  }
+
+  getTitle() {
+    return this.extractText('page-title');
   }
 
   /**
@@ -91,5 +96,9 @@ class Page {
     return resources.map(crumb => this.extractLink('title', crumb));
   }
 
+  clickBreadcrumb(link) {
+    return this.browser.clickLink(`[data-test="crumb"]  a[href="${link.href}"]`);
+  }
 }
+
 module.exports = Page;
