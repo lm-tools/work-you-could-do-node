@@ -8,12 +8,13 @@ const after = helper.after;
 const it = helper.it;
 const describe = helper.describe;
 const routes = helper.routes;
+const breadcrumb = helper.breadcrumbBuilder;
 
 describe('Search', () => {
   const account = '109c346f-e64e-4bb5-9749-28dbbdfdfe55';
 
   describe('new search', () => {
-    before(() => searchPage.visit(account));
+    before(() => Page.visit(account));
 
     it('should contain valid google tag manager data', () =>
       expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller')
@@ -25,13 +26,16 @@ describe('Search', () => {
 
     describe('breadcrumb', () => {
       it('should show breadcrumb on the search page', () => {
-        expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search']);
+        expect(searchPage.getBreadcrumbs()).to.eql([
+          breadcrumb('Introduction', routes.introductionUrl(account)),
+          breadcrumb('Search'),
+        ]);
       });
     });
   });
 
   describe('no results', () => {
-    before(() => searchPage.visit(account, ''));
+    before(() => Page.visit(account, ''));
 
     it('should contain valid google tag manager data', () =>
       expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller')
@@ -43,7 +47,11 @@ describe('Search', () => {
 
     describe('breadcrumb', () => {
       it('should show breadcrumb on the search page', () => {
-        expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search', 'Results']);
+        expect(searchPage.getBreadcrumbs()).to.eql([
+          breadcrumb('Introduction', routes.introductionUrl(account)),
+          breadcrumb('Search', routes.searchUrl(account)),
+          breadcrumb('Results'),
+        ]);
       });
     });
   });
@@ -64,7 +72,7 @@ describe('Search', () => {
           q: this.mockSearchQuery,
         })
         .reply(200, this.mockedResponse);
-      return searchPage.visit(account, 'MockedRetail');
+      return Page.visit(account, 'MockedRetail');
     });
     after(() => nock.restore());
 
@@ -82,7 +90,11 @@ describe('Search', () => {
 
     describe('breadcrumb', () => {
       it('should show breadcrumb on the search page', () => {
-        expect(searchPage.getBreadcrumbs()).to.eql(['Introduction', 'Search', 'Results']);
+        expect(searchPage.getBreadcrumbs()).to.eql([
+          breadcrumb('Introduction', routes.introductionUrl(account)),
+          breadcrumb('Search', routes.searchUrl(account)),
+          breadcrumb('Results'),
+        ]);
       });
     });
   });

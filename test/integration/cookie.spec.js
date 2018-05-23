@@ -7,7 +7,7 @@ const translation = require('./../../app/locales/en.json');
 
 describe('Cookie page', () => {
   before(() =>
-    cookiePage.visit()
+    Page.visit()
   );
 
   it('should contain valid googleTagManager', () =>

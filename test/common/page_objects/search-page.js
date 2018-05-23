@@ -2,7 +2,7 @@ const Page = require('./page.js');
 
 class SearchPage extends Page {
   visit(account, query) {
-    return this.browser.visit(this.routes.searchUrl(account, query));
+    return Page.visit(this.routes.searchUrl(account, query));
   }
 
   getText() {

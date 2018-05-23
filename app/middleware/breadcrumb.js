@@ -26,7 +26,7 @@ const pageToBreadcrumb = {
   },
   [pages.OCCUPATION]: {
     title: replacements.occupationTitle,
-    link: `/${replacements.accountId}/occupations/${replacements.socCode}` +
+    link: `/${replacements.accountId}/occupation/${replacements.socCode}` +
     `?fromQuery=${replacements.fromQuery}`,
   },
   [pages.HOW_TO]: {
@@ -34,8 +34,8 @@ const pageToBreadcrumb = {
     link: `/${replacements.accountId}/occupation_how_to/${replacements.socCode}
       ?fromQuery=${replacements.fromQuery}`,
   },
-  [pages.SAVED_ROLES]: { title: 'Saved roles', link: '/:accountId' },
-  [pages.NOT_FOUND]: { title: 'Page not found', link: '/${replacements.accountId}/introduction' },
+  [pages.SAVED_ROLES]: { title: 'Saved roles', link: `/${replacements.accountId}` },
+  [pages.NOT_FOUND]: { title: 'Page not found', link: `/${replacements.accountId}/introduction` },
 };
 
 const cloneBreadcrumb = crumb => Object.assign({}, crumb);
@@ -59,7 +59,9 @@ module.exports = (currentPage) =>
           let link = crumb.link;
           let title = crumb.title;
 
-          if (accountId) {
+          if (!accountId && currentPage === pages.NOT_FOUND) {
+            link = link.replace(`/${replacements.accountId}`, '');
+          } else {
             link = link.replace(replacements.accountId, accountId);
           }
           if (fromQuery) {

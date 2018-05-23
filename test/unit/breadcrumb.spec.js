@@ -1,27 +1,27 @@
 const pages = require('../../app/pages');
-const breadcrumb = require('../../app/middleware/breadcrumb');
+const breadcrumbMiddleware = require('../../app/middleware/breadcrumb');
 
 const { describe, it } = require('mocha');
 const expect = require('chai').expect;
+const Routes = require('../integration/support/routes');
+const routes = new Routes('');
 
 describe('breadcrumb', () => {
   const accountId = '0b91f2d0-8af8-40f1-81d6-1e45cd4fe3f5';
 
-  it('should set empty breadcrumb array if no page given',
-    () => {
-      const res = { locals: {} };
-      const returnedFunction = breadcrumb();
-      returnedFunction({}, res, () => {
-      });
-      expect(res.locals.trail).to.eql([]);
-    }
-  );
+  it('should set empty breadcrumb array if no page given', () => {
+    const res = { locals: {} };
+    const returnedFunction = breadcrumbMiddleware();
+    returnedFunction({}, res, () => {
+    });
+    expect(res.locals.trail).to.eql([]);
+  });
 
   it('should set empty breadcrumb array if no page matches',
     () => {
       const res = { locals: {} };
 
-      const returnedFunction = breadcrumb(Symbol('noMatch'));
+      const returnedFunction = breadcrumbMiddleware(Symbol('noMatch'));
       returnedFunction({}, res, () => {
       });
 
@@ -33,14 +33,29 @@ describe('breadcrumb', () => {
     const req = { params: { accountId } };
     const res = { locals: {} };
 
-    const returnedFunction = breadcrumb(pages.SAVED_ROLES);
+    const returnedFunction = breadcrumbMiddleware(pages.SAVED_ROLES);
     returnedFunction(req, res, () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
-      { title: 'Search', link: `/${accountId}/search/new` },
+      { title: 'Introduction', link: routes.introductionUrl(accountId) },
+      { title: 'Search', link: routes.searchUrl(accountId) },
       { title: 'Saved roles' },
+    ]);
+  });
+
+  it('should set breadcrumb information if account param is not populated for not found page ' +
+    'removing replacement token', () => {
+    const req = { params: {} };
+    const res = { locals: {} };
+
+    const returnedFunction = breadcrumbMiddleware(pages.NOT_FOUND);
+    returnedFunction(req, res, () => {
+    });
+
+    expect(res.locals.trail).to.eql([
+      { title: 'Introduction', link: routes.introductionUrl() },
+      { title: 'Page not found' },
     ]);
   });
 
@@ -52,14 +67,14 @@ describe('breadcrumb', () => {
     };
     const res = { locals: {} };
 
-    const returnedFunction = breadcrumb(pages.OCCUPATION);
+    const returnedFunction = breadcrumbMiddleware(pages.OCCUPATION);
     returnedFunction(req, res, () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
-      { title: 'Search', link: `/${accountId}/search/new` },
-      { title: 'Results', link: `/${accountId}/search?query=Retail` },
+      { title: 'Introduction', link: routes.introductionUrl(accountId) },
+      { title: 'Search', link: routes.searchUrl(accountId) },
+      { title: 'Results', link: routes.searchUrl(accountId, 'Retail') },
       { title: 'Managers and directors in retail and wholesale' },
     ]);
   });
@@ -72,17 +87,17 @@ describe('breadcrumb', () => {
     };
     const res = { locals: {} };
 
-    const returnedFunction = breadcrumb(pages.HOW_TO);
+    const returnedFunction = breadcrumbMiddleware(pages.HOW_TO);
     returnedFunction(req, res, () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
-      { title: 'Search', link: `/${accountId}/search/new` },
-      { title: 'Results', link: `/${accountId}/search?query=Retail` },
+      { title: 'Introduction', link: routes.introductionUrl(accountId) },
+      { title: 'Search', link: routes.searchUrl(accountId) },
+      { title: 'Results', link: routes.searchUrl(accountId, 'Retail') },
       {
         title: 'Managers and directors in retail and wholesale',
-        link: `/${accountId}/occupations/1190?fromQuery=Retail`,
+        link: routes.occupationUrl(accountId, 1190, 'Retail'),
       },
       { title: 'How-to' },
     ]);
@@ -92,12 +107,12 @@ describe('breadcrumb', () => {
     const req = { params: { accountId } };
     const res = { locals: {} };
 
-    const returnedFunction = breadcrumb(pages.NOT_FOUND);
+    const returnedFunction = breadcrumbMiddleware(pages.NOT_FOUND);
     returnedFunction(req, res, () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: `/${accountId}/introduction` },
+      { title: 'Introduction', link: routes.introductionUrl(accountId) },
       { title: 'Page not found' },
     ]);
   });

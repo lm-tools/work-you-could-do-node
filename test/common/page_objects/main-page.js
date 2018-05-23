@@ -4,7 +4,7 @@ class MainPage {
   }
 
   visit() {
-    return this.browser.visit('/');
+    return Page.visit('/');
   }
 }
 module.exports = MainPage;

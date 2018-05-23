@@ -3,7 +3,7 @@ const lmiClient = require('./../services/lmi-client-service');
 module.exports = (req, res, next) => {
   const socCode = req.params.id;
 
-  if (socCode === undefined) {
+  if (!socCode) {
     const error = new Error('msg');
     error.status = 500;
     return next(error);

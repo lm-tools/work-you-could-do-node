@@ -9,7 +9,7 @@ const it = helper.it;
 const routes = helper.routes;
 const knexCleaner = helper.knexCleaner;
 const knex = helper.knex;
-
+const breadcrumb = helper.breadcrumbBuilder;
 const ACCOUNT_ID = 4567189203921863;
 const OCCUPATION_ID = 4235;
 const FROM_QUERY = 'Retail';
@@ -23,7 +23,7 @@ describe('Occupation', () => {
     this.getSocMock = mock.getSocMock();
     mock.payMock();
     mock.hoursMock();
-    return occupationPage.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
+    return Page.visit(ACCOUNT_ID, OCCUPATION_ID, FROM_QUERY);
   });
 
   beforeEach(() => knexCleaner.clean(knex, { ignoreTables: ['knex_migrations'] }));
@@ -65,11 +65,17 @@ describe('Occupation', () => {
     })
   );
 
-  describe('breadcrumb', () => {
+  describe('breadcrumb', () =>
     it('should show breadcrumb on the details page', () => {
-      expect(occupationPage.getBreadcrumbs())
-        .to.eql(['Introduction', 'Search', 'Results',
-        this.getSocMock.mockResponse(OCCUPATION_ID).title]);
-    });
-  });
-});
+      const expectedTitle = this.getSocMock.mockResponse(OCCUPATION_ID).title;
+
+      expect(occupationPage.getBreadcrumbs()).to.eql([
+        breadcrumb('Introduction', routes.introductionUrl(ACCOUNT_ID)),
+        breadcrumb('Search', routes.searchUrl(ACCOUNT_ID)),
+        breadcrumb('Results', routes.searchUrl(ACCOUNT_ID, 'Retail')),
+        breadcrumb(expectedTitle),
+      ]);
+    })
+  );
+})
+;

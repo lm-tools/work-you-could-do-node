@@ -18,6 +18,7 @@ const OccupationPage = require('../../common/page_objects/occupation-page');
 const Routes = require('./routes');
 const routes = new Routes(basePath, Zombie.site);
 const mock = require('../../common/mocks');
+const breadcrumbBuilder = require('./breadcrumb');
 
 process.env.GOOGLE_TAG_MANAGER_ID = 'fake-id';
 process.env.PORT = port;
@@ -50,4 +51,5 @@ module.exports = {
   knexCleaner,
   routes,
   basePath,
+  breadcrumbBuilder,
 };

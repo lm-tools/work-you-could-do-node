@@ -1,7 +1,6 @@
 class Routes {
   constructor(basePath, siteUrl) {
     this.basePath = basePath;
-    this.siteUrl = siteUrl;
   }
 
   entrypointUrl(query = '') {
@@ -9,7 +8,8 @@ class Routes {
   }
 
   introductionUrl(accountId) {
-    return `${this.basePath}/${accountId}/introduction`;
+    return accountId ? `${this.basePath}/${accountId}/introduction`
+      : `${this.basePath}/introduction`;
   }
 
   cookieUrl() {

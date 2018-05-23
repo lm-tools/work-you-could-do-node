@@ -5,7 +5,7 @@ class Page {
     this.routes = routes;
   }
   // eslint-disable-next-line no-unused-vars
-  visit(...args) {
+  static visit(...args) {
     throw new Error('Must implement the visit method');
   }
 
@@ -16,10 +16,10 @@ class Page {
    * returns the text within the element
    */
   extractText(dataTest = '', context = this.browser) {
-    return this.browser.text(this.dataTestEl(dataTest), context);
+    return this.browser.text(Page.dataTestEl(dataTest), context);
   }
 
-  dataTestEl(dataTest) {
+  static dataTestEl(dataTest) {
     return dataTest ? `[data-test="${dataTest}"]` : '';
   }
 
@@ -30,7 +30,7 @@ class Page {
    * returns the text within the element
    */
   extractLink(dataTest, context = this.browser) {
-    const href = this.browser.query(this.dataTestEl(dataTest), context).getAttribute('href');
+    const href = this.browser.query(Page.dataTestEl(dataTest), context).getAttribute('href');
     const text = this.extractText(dataTest, context);
     return { href, text };
   }
@@ -74,7 +74,7 @@ class Page {
    *     <span data-test="occupation-task">
    *       <li data-test="occupation-task-text">{{.}}</li>
    *     </span>
-   * @param {object} context - the 'core' object returned from browser.querySelector. By default
+   * @param {object} dataTest - the 'core' object returned from browser.querySelector. By default
    * @returns array of text within the elements
    */
   extractAll(dataTest) {
@@ -88,7 +88,7 @@ class Page {
    */
   getBreadcrumbs() {
     const resources = this.browser.queryAll('[data-test="crumb"]');
-    return resources.map(crumb => this.extractText('title', crumb));
+    return resources.map(crumb => this.extractLink('title', crumb));
   }
 
 }
