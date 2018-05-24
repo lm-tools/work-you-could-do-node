@@ -53,7 +53,15 @@ gulp.task('js-vendor', () =>
   ]).pipe(gulp.dest('dist/public/js'))
 );
 
+gulp.task('img-vendor', () => {
+  gulp.src([
+    'node_modules/govuk-elements-sass/node_modules/govuk_frontend_toolkit/images/*.png',
+  ]).pipe(gulp.dest('vendor/govuk_frontend_toolkit/assets/images'));
+});
+
 gulp.task('js', ['browserify', 'js-vendor']);
+
+gulp.task('img', ['img-vendor']);
 
 gulp.task('css', () =>
   gulp.src('app/assets/stylesheets/*.scss')
@@ -65,16 +73,17 @@ gulp.task('css', () =>
           'node_modules/govuk_frontend_toolkit/stylesheets',
           'node_modules/govuk-elements-sass/public/sass',
         ],
-      }))
+      }).on('error', sass.logError))
     .pipe(modifyCssUrls({
       modify(url) {
+        // replace css image paths to point to the vendor folder.
         return url.replace('..', '../vendor/v1');
       },
     }))
     .pipe(gulp.dest('dist/public/stylesheets/'))
 );
 
-gulp.task('revision:rename', ['js', 'css'], () =>
+gulp.task('revision:rename', ['js', 'css', 'img'], () =>
   gulp.src([
     'dist/public/**/*.html',
     'dist/public/**/*.css',
@@ -88,13 +97,7 @@ gulp.task('revision:rename', ['js', 'css'], () =>
     .pipe(gulp.dest('./dist/public'))
 );
 
-gulp.task('compile', ['vendor-assets', 'revision:rename']);
-
-gulp.task('vendor-assets', () => {
-  gulp.src([
-    'node_modules/govuk_frontend_toolkit/images/*.png',
-  ]).pipe(gulp.dest('vendor/govuk_frontend_toolkit/assets/images'));
-});
+gulp.task('compile', ['revision:rename']);
 
 gulp.task('server', () => {
   if (node) node.kill();

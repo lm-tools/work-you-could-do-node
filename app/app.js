@@ -84,6 +84,8 @@ app.use(assetPath, cacheHeaders);
 
 app.use(`${assetPath}vendor/v1`, express.static(path.join(__dirname, '..',
   'vendor', 'govuk_template_mustache_inheritance', 'assets')));
+app.use(`${assetPath}vendor/v1`, express.static(path.join(__dirname, '..',
+  'vendor', 'govuk_frontend_toolkit', 'assets')));
 
 app.use(assetPath, express.static(path.join(__dirname, '..', 'dist', 'public')));
 
