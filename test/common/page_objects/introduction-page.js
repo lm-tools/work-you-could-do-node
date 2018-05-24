@@ -1,8 +1,8 @@
 const Page = require('./page');
 
 class IntroductionPage extends Page {
-  visit(account) {
-    return this.browser.visit(this.routes.introductionUrl(account));
+  visit(accountId) {
+    return this.browser.visit(this.routes.introductionUrl({ accountId }));
   }
 
   clickNext() {

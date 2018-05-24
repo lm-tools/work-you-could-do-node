@@ -19,7 +19,7 @@ describe('Entrypoints', () => {
   );
 
   it('should see the entry page with referenced accountId', () =>
-    browser.visit(routes.entrypointUrl(`?id=${accountId}`))
+    browser.visit(routes.entrypointUrl(accountId))
       .then(() =>
         expect(introductionPage.browserPath())
           .to.match(new RegExp(accountEntryPointRegEx))

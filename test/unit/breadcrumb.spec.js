@@ -3,7 +3,7 @@ const breadcrumbMiddleware = require('../../app/middleware/breadcrumb');
 
 const { describe, it } = require('mocha');
 const expect = require('chai').expect;
-const Routes = require('../integration/support/routes');
+const Routes = require('../../app/routes');
 const routes = new Routes('');
 
 describe('breadcrumb', () => {
@@ -38,26 +38,26 @@ describe('breadcrumb', () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: routes.introductionUrl(accountId) },
-      { title: 'Search', link: routes.searchUrl(accountId) },
+      { title: 'Introduction', link: routes.introductionUrl({ accountId }) },
+      { title: 'Search', link: routes.searchUrl({ accountId }) },
       { title: 'Saved roles' },
     ]);
   });
 
-  it('should set breadcrumb information if account param is not populated for not found page ' +
-    'removing replacement token', () => {
-    const req = { params: {} };
-    const res = { locals: {} };
+  it('should set breadcrumb information if account param is not populated for not found page',
+    () => {
+      const req = { params: {} };
+      const res = { locals: {} };
 
-    const returnedFunction = breadcrumbMiddleware(pages.NOT_FOUND);
-    returnedFunction(req, res, () => {
+      const returnedFunction = breadcrumbMiddleware(pages.NOT_FOUND);
+      returnedFunction(req, res, () => {
+      });
+
+      expect(res.locals.trail).to.eql([
+        { title: 'Introduction', link: routes.introductionUrl() },
+        { title: 'Page not found' },
+      ]);
     });
-
-    expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: routes.introductionUrl() },
-      { title: 'Page not found' },
-    ]);
-  });
 
   it('should set breadcrumb information adding the search query and occupation title', () => {
     const req = {
@@ -72,9 +72,9 @@ describe('breadcrumb', () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: routes.introductionUrl(accountId) },
-      { title: 'Search', link: routes.searchUrl(accountId) },
-      { title: 'Results', link: routes.searchUrl(accountId, 'Retail') },
+      { title: 'Introduction', link: routes.introductionUrl({ accountId }) },
+      { title: 'Search', link: routes.searchUrl({ accountId }) },
+      { title: 'Results', link: routes.resultsUrl({ accountId, fromQuery: 'Retail' }) },
       { title: 'Managers and directors in retail and wholesale' },
     ]);
   });
@@ -92,12 +92,12 @@ describe('breadcrumb', () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: routes.introductionUrl(accountId) },
-      { title: 'Search', link: routes.searchUrl(accountId) },
-      { title: 'Results', link: routes.searchUrl(accountId, 'Retail') },
+      { title: 'Introduction', link: routes.introductionUrl({ accountId }) },
+      { title: 'Search', link: routes.searchUrl({ accountId }) },
+      { title: 'Results', link: routes.resultsUrl({ accountId, fromQuery: 'Retail' }) },
       {
         title: 'Managers and directors in retail and wholesale',
-        link: routes.occupationUrl(accountId, 1190, 'Retail'),
+        link: routes.occupationUrl({ accountId, socCode: 1190, fromQuery: 'Retail' }),
       },
       { title: 'How-to' },
     ]);
@@ -112,7 +112,7 @@ describe('breadcrumb', () => {
     });
 
     expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: routes.introductionUrl(accountId) },
+      { title: 'Introduction', link: routes.introductionUrl({ accountId }) },
       { title: 'Page not found' },
     ]);
   });

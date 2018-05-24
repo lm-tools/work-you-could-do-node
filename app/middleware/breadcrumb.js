@@ -1,5 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const pages = require('../pages');
+const Routes = require('../routes');
+const routes = new Routes('');
 
 const pageToBreadcrumbTrail = {
   [pages.SAVED_ROLES]: [pages.INTRODUCTION, pages.SEARCH],
@@ -10,32 +12,14 @@ const pageToBreadcrumbTrail = {
   [pages.NOT_FOUND]: [pages.INTRODUCTION],
 };
 
-const replacements = {
-  accountId: ':accountId',
-  socCode: ':socCode',
-  fromQuery: ':fromQuery',
-  occupationTitle: ':occupationTitle',
-};
-
 const pageToBreadcrumb = {
-  [pages.INTRODUCTION]: { title: 'Introduction', link: `/${replacements.accountId}/introduction` },
-  [pages.SEARCH]: { title: 'Search', link: `/${replacements.accountId}/search/new` },
-  [pages.RESULTS]: {
-    title: 'Results',
-    link: `/${replacements.accountId}/search?query=${replacements.fromQuery}`,
-  },
-  [pages.OCCUPATION]: {
-    title: replacements.occupationTitle,
-    link: `/${replacements.accountId}/occupation/${replacements.socCode}` +
-    `?fromQuery=${replacements.fromQuery}`,
-  },
-  [pages.HOW_TO]: {
-    title: 'How-to',
-    link: `/${replacements.accountId}/occupation_how_to/${replacements.socCode}
-      ?fromQuery=${replacements.fromQuery}`,
-  },
-  [pages.SAVED_ROLES]: { title: 'Saved roles', link: `/${replacements.accountId}` },
-  [pages.NOT_FOUND]: { title: 'Page not found', link: `/${replacements.accountId}/introduction` },
+  [pages.INTRODUCTION]: { title: 'Introduction', link: routes.introductionUrl },
+  [pages.SEARCH]: { title: 'Search', link: routes.searchUrl },
+  [pages.RESULTS]: { title: 'Results', link: routes.resultsUrl },
+  [pages.OCCUPATION]: { link: routes.occupationUrl },
+  [pages.HOW_TO]: { title: 'How-to', link: routes.occupationHowTo },
+  [pages.SAVED_ROLES]: { title: 'Saved roles', link: routes.savedRoles },
+  [pages.NOT_FOUND]: { title: 'Page not found', link: routes.introductionUrl },
 };
 
 const cloneBreadcrumb = crumb => Object.assign({}, crumb);
@@ -56,23 +40,9 @@ module.exports = (currentPage) =>
       trail = [...breadcrumbTrail, currentPage]
         .map(page => cloneBreadcrumb(pageToBreadcrumb[page]))
         .map((crumb, index, arr) => {
-          let link = crumb.link;
-          let title = crumb.title;
-
-          if (!accountId && currentPage === pages.NOT_FOUND) {
-            link = link.replace(`/${replacements.accountId}`, '');
-          } else {
-            link = link.replace(replacements.accountId, accountId);
-          }
-          if (fromQuery) {
-            link = link.replace(replacements.fromQuery, fromQuery);
-          }
-          if (socCode) {
-            link = link.replace(replacements.socCode, socCode);
-          }
-          if (title) {
-            title = title.replace(replacements.occupationTitle, occupationTitle);
-          }
+          // 'this' needs to be routes object not crumb object to get basePath
+          const link = crumb.link.call(routes, { accountId, fromQuery, socCode });
+          const title = crumb.title || occupationTitle;
 
           return isLastElement(index, arr) ? { title } : { title, link };
         });
