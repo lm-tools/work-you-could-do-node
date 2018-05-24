@@ -8,10 +8,11 @@ const pageToBreadcrumbTrail = {
   [pages.RESULTS]: [pages.INTRODUCTION, pages.SEARCH],
   [pages.OCCUPATION]: [pages.INTRODUCTION, pages.SEARCH, pages.RESULTS],
   [pages.HOW_TO]: [pages.INTRODUCTION, pages.SEARCH, pages.RESULTS, pages.OCCUPATION],
-  [pages.NOT_FOUND]: [pages.INTRODUCTION],
+  [pages.NOT_FOUND]: [pages.ENTRYPOINT],
 };
 
 const pageToBreadcrumb = {
+  [pages.ENTRYPOINT]: { title: 'Introduction', link: routes.entrypointUrl },
   [pages.INTRODUCTION]: { title: 'Introduction', link: routes.introductionUrl },
   [pages.SEARCH]: { title: 'Search', link: routes.searchUrl },
   [pages.RESULTS]: { title: 'Results', link: routes.resultsUrl },

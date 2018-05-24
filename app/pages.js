@@ -1,4 +1,5 @@
 module.exports = Object.freeze({
+  ENTRYPOINT: Symbol('entrypoint'),
   INTRODUCTION: Symbol('introduction'),
   SEARCH: Symbol('search'),
   RESULTS: Symbol('results'),

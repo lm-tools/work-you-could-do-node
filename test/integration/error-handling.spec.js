@@ -35,7 +35,7 @@ describe('Error handling', () => {
 
       it('should show breadcrumb on the page', () => {
         expect(errorPage.getBreadcrumbs()).to.eql([
-          breadcrumb('Introduction', routes.introductionUrl()),
+          breadcrumb('Introduction', routes.entrypointUrl()),
           breadcrumb('Page not found'),
         ]);
       });

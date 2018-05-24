@@ -53,10 +53,24 @@ describe('breadcrumb', () => {
       });
 
       expect(res.locals.trail).to.eql([
-        { title: 'Introduction', link: routes.introductionUrl() },
+        { title: 'Introduction', link: routes.entrypointUrl() },
         { title: 'Page not found' },
       ]);
     });
+
+  it('should set breadcrumb information for the not found page', () => {
+    const req = { params: { accountId } };
+    const res = { locals: {} };
+
+    const returnedFunction = breadcrumbMiddleware(pages.NOT_FOUND);
+    returnedFunction(req, res, () => {
+    });
+
+    expect(res.locals.trail).to.eql([
+      { title: 'Introduction', link: routes.entrypointUrl({ accountId }) },
+      { title: 'Page not found' },
+    ]);
+  });
 
   it('should set breadcrumb information adding the search query and occupation title', () => {
     const req = {
@@ -99,20 +113,6 @@ describe('breadcrumb', () => {
         link: routes.occupationUrl({ accountId, socCode: 1190, fromQuery: 'Retail' }),
       },
       { title: 'How-to' },
-    ]);
-  });
-
-  it('should set breadcrumb information for the not found page', () => {
-    const req = { params: { accountId } };
-    const res = { locals: {} };
-
-    const returnedFunction = breadcrumbMiddleware(pages.NOT_FOUND);
-    returnedFunction(req, res, () => {
-    });
-
-    expect(res.locals.trail).to.eql([
-      { title: 'Introduction', link: routes.introductionUrl({ accountId }) },
-      { title: 'Page not found' },
     ]);
   });
 })

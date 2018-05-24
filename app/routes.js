@@ -3,7 +3,7 @@ class Routes {
     this.basePath = basePath;
   }
 
-  entrypointUrl(accountId = '') {
+  entrypointUrl({ accountId = '' } = {}) {
     return accountId ? `${this.basePath}?id=${accountId}` : this.basePath;
   }
 
