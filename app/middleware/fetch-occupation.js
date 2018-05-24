@@ -1,4 +1,4 @@
-const lmiClient = require('./../services/lmi-client-service');
+const { lmiClient } = require('./../appContext');
 
 module.exports = (req, res, next) => {
   const socCode = req.params.id;
@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     return next(error);
   }
 
-  return lmiClient.getSoc(socCode).then(occupation => {
+  return lmiClient.getOccupation(socCode).then(occupation => {
     // eslint-disable-next-line no-param-reassign
     req.occupation = occupation;
     next();
