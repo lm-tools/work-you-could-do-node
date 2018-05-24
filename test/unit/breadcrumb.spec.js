@@ -3,8 +3,7 @@ const breadcrumbMiddleware = require('../../app/middleware/breadcrumb');
 
 const { describe, it } = require('mocha');
 const expect = require('chai').expect;
-const Routes = require('../../app/routes');
-const routes = new Routes('');
+const { routes } = require('../../app/appContext');
 
 describe('breadcrumb', () => {
   const accountId = '0b91f2d0-8af8-40f1-81d6-1e45cd4fe3f5';

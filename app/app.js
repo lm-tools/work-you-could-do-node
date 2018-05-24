@@ -18,6 +18,7 @@ const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
 const pages = require('./pages');
 const breadcrumb = require('./middleware/breadcrumb');
+const { basePath } = require('./appContext');
 
 const mocks = require('./../test/common/mocks');
 
@@ -33,7 +34,7 @@ app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
 
 // run the whole application in a directory
-const basePath = app.locals.basePath = process.env.EXPRESS_BASE_PATH || '';
+app.locals.basePath = basePath;
 const assetPath = `${basePath}/`;
 const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
 

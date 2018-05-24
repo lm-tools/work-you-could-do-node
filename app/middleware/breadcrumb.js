@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const pages = require('../pages');
-const Routes = require('../routes');
-const routes = new Routes('');
+const { routes } = require('../appContext');
 
 const pageToBreadcrumbTrail = {
   [pages.SAVED_ROLES]: [pages.INTRODUCTION, pages.SEARCH],
