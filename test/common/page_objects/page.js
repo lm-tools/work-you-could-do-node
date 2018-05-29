@@ -4,9 +4,14 @@ class Page {
     this.browser = browser;
     this.routes = routes;
   }
+
   // eslint-disable-next-line no-unused-vars
   visit(...args) {
     throw new Error('Must implement the visit method');
+  }
+
+  getTitle() {
+    return this.extractText('page-title');
   }
 
   /**
@@ -74,7 +79,7 @@ class Page {
    *     <span data-test="occupation-task">
    *       <li data-test="occupation-task-text">{{.}}</li>
    *     </span>
-   * @param {object} context - the 'core' object returned from browser.querySelector. By default
+   * @param {object} dataTest - the 'core' object returned from browser.querySelector. By default
    * @returns array of text within the elements
    */
   extractAll(dataTest) {
@@ -82,5 +87,18 @@ class Page {
       .map(context => this.extractText(`${dataTest}-text`, context));
   }
 
+  /**
+   * Find array of breadcrumbs.
+   * @returns {*|Array}
+   */
+  getBreadcrumbs() {
+    const resources = this.browser.queryAll('[data-test="crumb"]');
+    return resources.map(crumb => this.extractLink('title', crumb));
+  }
+
+  clickBreadcrumb(link) {
+    return this.browser.clickLink(`[data-test="crumb"]  a[href="${link.href}"]`);
+  }
 }
+
 module.exports = Page;

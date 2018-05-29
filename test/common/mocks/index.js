@@ -34,7 +34,6 @@ module.exports = {
     hoursMock();
     payMock();
   },
-  restore: () => {
-    nock.restore();
-  },
+  restore: () => nock.restore(),
+  cleanAll: () => nock.cleanAll(),
 };

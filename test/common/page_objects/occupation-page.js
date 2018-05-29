@@ -1,8 +1,12 @@
 const Page = require('./page.js');
 
 class OccupationPage extends Page {
-  visit(account, occupationId, fromQuery) {
-    return this.browser.visit(this.routes.occupationUrl(account, occupationId, fromQuery));
+  visit(accountId, occupationId, fromQuery) {
+    return this.browser.visit(this.routes.occupationUrl({
+      accountId,
+      socCode: occupationId,
+      fromQuery,
+    }));
   }
 
   getTasks() {

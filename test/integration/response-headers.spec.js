@@ -7,7 +7,7 @@ describe('Response headers', () => {
   describe('for dynamic html', () => {
     before(() =>
       request(helper.app)
-        .get(helper.routes.introductionUrl(123))
+        .get(helper.routes.introductionUrl({ accountId: 123 }))
         .then(response => {
           this.response = response;
         })
