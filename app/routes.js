@@ -12,7 +12,7 @@ class Routes {
       : `${this.basePath}/introduction`;
   }
 
-  savedRoles({ accountId = '' } = {}) {
+  savedRolesUrl({ accountId = '' } = {}) {
     return `${this.basePath}/${accountId}`;
   }
 
@@ -34,7 +34,7 @@ class Routes {
     return `${this.basePath}/${accountId}/occupation/${socCode}?${fromQ}`;
   }
 
-  occupationHowTo({ accountId = '', socCode = '', fromQuery = '' } = {}) {
+  occupationHowToUrl({ accountId = '', socCode = '', fromQuery = '' } = {}) {
     return `${this.basePath}/${accountId}/occupationHowTo/${socCode}?fromQuery=${fromQuery}`;
   }
 }

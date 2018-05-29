@@ -17,8 +17,8 @@ const pageToBreadcrumb = {
   [pages.SEARCH]: { title: 'Search', link: routes.searchUrl },
   [pages.RESULTS]: { title: 'Results', link: routes.resultsUrl },
   [pages.OCCUPATION]: { link: routes.occupationUrl },
-  [pages.HOW_TO]: { title: 'How-to', link: routes.occupationHowTo },
-  [pages.SAVED_ROLES]: { title: 'Saved roles', link: routes.savedRoles },
+  [pages.HOW_TO]: { title: 'How-to', link: routes.occupationHowToUrl },
+  [pages.SAVED_ROLES]: { title: 'Saved roles', link: routes.savedRolesUrl },
   [pages.NOT_FOUND]: { title: 'Page not found', link: routes.introductionUrl },
 };
 

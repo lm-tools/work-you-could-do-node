@@ -61,7 +61,7 @@ describe('Occupation', () => {
 
   it('should display help link', () =>
     expect(occupationPage.getHelpLink()).to.eql({
-      href: routes.occupationHowTo({ accountId, socCode: occupationId, fromQuery }),
+      href: routes.occupationHowToUrl({ accountId, socCode: occupationId, fromQuery }),
       text: 'How do I use this?',
     })
   );
