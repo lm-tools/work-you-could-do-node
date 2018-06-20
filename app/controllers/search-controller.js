@@ -1,19 +1,22 @@
 const express = require('express');
 const router = new express.Router({ mergeParams: true });
-const lmiClient = require('./../services/lmi-client-service');
+const appContext = require('./../appContext');
+const lmiClient = appContext.lmiClient;
+const pages = require('../pages');
+const breadcrumb = require('../middleware/breadcrumb');
 
 /* GET home page. */
-router.get('/new', (req, res) => {
+router.get('/new', breadcrumb(pages.SEARCH), (req, res) => {
   res.render('search', { accountId: req.params.accountId });
 });
 
-router.get('/', (req, res) => {
+router.get('/', breadcrumb(pages.RESULTS), (req, res) => {
   const query = req.query.query;
   lmiClient.searchSoc(query)
-    .then((response) => res.render('search', {
+    .then(searchResults => res.render('search', {
       accountId: req.params.accountId,
       query: req.query.query,
-      searchResults: JSON.parse(response.body),
+      searchResults,
     }));
 });
 

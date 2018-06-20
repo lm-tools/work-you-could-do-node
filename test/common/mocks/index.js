@@ -27,13 +27,13 @@ module.exports = {
   getSocMock,
   hoursMock,
   payMock,
+  searchMock,
   mockAll: () => {
     getSocMock();
     searchMock();
     hoursMock();
     payMock();
   },
-  restore: () => {
-    nock.restore();
-  },
+  restore: () => nock.restore(),
+  cleanAll: () => nock.cleanAll(),
 };

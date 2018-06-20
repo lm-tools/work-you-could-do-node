@@ -22,5 +22,13 @@ describe('Introduction', () => {
       expect(introductionPage.browserPath()).to.match(new RegExp(`${account}/search/new`))
     )
   );
+
+  describe('breadcrumb', () => {
+    before(() => introductionPage.visit(account));
+
+    it('should not show breadcrumb on the homepage', () =>
+      expect(introductionPage.getBreadcrumbs()).to.eql([])
+    );
+  });
 });
 
