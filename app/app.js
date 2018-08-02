@@ -4,12 +4,8 @@ const favicon = require('serve-favicon');
 const logger = require('./../logger');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const controllers = require('./controllers/index');
 
-const indexController = require('./controllers/index-controller');
-const introductionController = require('./controllers/introduction-controller');
-const searchController = require('./controllers/search-controller');
-const occupationController = require('./controllers/occupation-controller');
-const cookieController = require('./controllers/cookie-controller');
 const i18n = require('./middleware/i18n');
 const errorHandler = require('./middleware/error-handler');
 const healthCheckController = require('./controllers/health-check-controller');
@@ -91,11 +87,16 @@ app.use(assetPath, express.static(path.join(__dirname, '..', 'dist', 'public')))
 
 app.use(helmet.noCache());
 
-app.use(`${basePath}/`, indexController);
-app.use(`${basePath}/`, cookieController);
-app.use(`${basePath}/:accountId/introduction`, introductionController);
-app.use(`${basePath}/:accountId/search`, searchController);
-app.use(`${basePath}/:accountId/occupation`, occupationController);
+if (process.env.MI === 'true' || process.env.MI === true) {
+  app.use(`${basePath}/metrics`, controllers.metrics);
+} else {
+  // revoke controller access to MI instance to avoid write attempts to replica db
+  app.use(`${basePath}/`, controllers.index);
+  app.use(`${basePath}/`, controllers.cookie);
+  app.use(`${basePath}/:accountId/introduction`, controllers.introduction);
+  app.use(`${basePath}/:accountId/search`, controllers.search);
+  app.use(`${basePath}/:accountId/occupation`, controllers.occupation);
+}
 
 // catch 404 and forward to error handler
 app.use(breadcrumb(pages.NOT_FOUND), (req, res, next) => {
