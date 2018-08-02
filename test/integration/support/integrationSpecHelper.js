@@ -15,6 +15,7 @@ const CookiePage = require('../../common/page_objects/cookie-page');
 const IntroductionPage = require('../../common/page_objects/introduction-page');
 const SearchPage = require('../../common/page_objects/search-page');
 const OccupationPage = require('../../common/page_objects/occupation-page');
+const SavedOccupationPage = require('../../common/page_objects/saved-occupations-page');
 const Routes = require('./routes');
 const routes = new Routes(basePath, Zombie.site);
 const mock = require('../../common/mocks');
@@ -39,6 +40,7 @@ module.exports = {
   introductionPage: new IntroductionPage(browser, routes),
   searchPage: new SearchPage(browser, routes),
   occupationPage: new OccupationPage(browser, routes),
+  savedOccupationPage: new SavedOccupationPage(browser, routes),
   mock,
   app,
   expect,

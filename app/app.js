@@ -60,6 +60,7 @@ app.use((req, res, next) => {
         '../../vendor/govuk_template_mustache_inheritance/views/layouts/govuk_template',
       googleTagManager: 'partials/google-tag-manager',
       appCookies: 'partials/app-cookies',
+      occupation: 'partials/occupation'
     },
   });
   next();

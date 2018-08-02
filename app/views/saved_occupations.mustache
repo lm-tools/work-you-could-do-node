@@ -1,0 +1,21 @@
+{{<layout}}
+
+{{$applicationContent}}
+
+{{#occupations}}
+  <section data-test="occupation-{{occupation.id}}">
+    {{>occupation}}
+    <form id="remove-occupation-{{occupation.id}}" class="remove-occupation-form"
+          action="{{basePath}}/{{accountId}}/saved_occupations/{{occupation.id}}/delete"
+          accept-charset="UTF-8" data-remote="true" method="post">
+      <input type="submit" data-test="remove-occupation-{{occupation.id}}" class="link-button" value="Remove role">
+    </form>
+    <hr>
+  </section>
+{{/occupations}}
+
+<p><a href="{{basePath}}/{{accountId}}/search" class="link-back" data-test="back-to-search-results">Search results</a></p>
+
+{{/applicationContent}}
+
+{{/layout}}

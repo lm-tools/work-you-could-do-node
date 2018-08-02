@@ -77,8 +77,8 @@ class Page {
    * @param {object} context - the 'core' object returned from browser.querySelector. By default
    * @returns array of text within the elements
    */
-  extractAll(dataTest) {
-    return this.browser.queryAll(`[data-test="${dataTest}"]`)
+  extractAll(dataTest, context = this.browser) {
+    return this.browser.queryAll(`[data-test="${dataTest}"]`, context)
       .map(context => this.extractText(`${dataTest}-text`, context));
   }
 
