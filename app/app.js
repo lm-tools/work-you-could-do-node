@@ -16,8 +16,6 @@ const pages = require('./pages');
 const breadcrumb = require('./middleware/breadcrumb');
 const { basePath } = require('./appContext');
 
-const mocks = require('./../test/common/mocks');
-
 const app = express();
 i18n(app);
 app.use(helmet());
@@ -39,6 +37,8 @@ app.use(`${basePath}/health_check`, healthCheckController);
 
 // Add mock lmi api if required
 if (process.env.NODE_ENV === 'development') {
+  // eslint-disable-next-line global-require
+  const mocks = require('./../test/common/mocks');
   logger.info('detected development mode. Using nock library');
   mocks.mockAll();
 }
