@@ -96,6 +96,7 @@ if (process.env.MI === 'true' || process.env.MI === true) {
   app.use(`${basePath}/:accountId/introduction`, controllers.introduction);
   app.use(`${basePath}/:accountId/search`, controllers.search);
   app.use(`${basePath}/:accountId/occupation`, controllers.occupation);
+  app.use(`${basePath}/:accountId/occupation-how-to`, controllers.occupationHowTo);
 }
 
 // catch 404 and forward to error handler

@@ -35,7 +35,7 @@ class Routes {
   }
 
   occupationHowToUrl({ accountId = '', socCode = '', fromQuery = '' } = {}) {
-    return `${this.basePath}/${accountId}/occupationHowTo/${socCode}?fromQuery=${fromQuery}`;
+    return `${this.basePath}/${accountId}/occupation-how-to/${socCode}?fromQuery=${fromQuery}`;
   }
 }
 

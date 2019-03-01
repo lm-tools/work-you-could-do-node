@@ -4,6 +4,7 @@ const index = require('./index-controller');
 const introduction = require('./introduction-controller');
 const metrics = require('./metrics-controller');
 const occupation = require('./occupation-controller');
+const occupationHowTo = require('./occupation-how-to-controller');
 const search = require('./search-controller');
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   introduction,
   metrics,
   occupation,
+  occupationHowTo,
   search,
 };
