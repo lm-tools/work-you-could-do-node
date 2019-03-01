@@ -3,11 +3,11 @@
 {{$applicationContent}}
 
 <section class="occupation-how-to-detail">
-    <h2 class="heading-xlarge">How to use this information</h2>
+    <h2 class="heading-xlarge">{{#__}}occupation-how-to.heading{{/__}}</h2>
 
     <div class="grid-row">
         <div class="column-half example-box">
-            <h3 class="heading-small">Kind of work you’d do</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.tasks.heading{{/__}}</h3>
             <ul class="list-bullet" id="occupation-tasks">
                 {{#occupation.tasks}}
                     <span data-test="occupation-task">
@@ -17,57 +17,57 @@
             </ul>
         </div>
         <div class="column-half">
-            <h3 class="heading-small">Use this to:</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.tasks.help.heading{{/__}}</h3>
             <ul class="list-bullet">
-                <li>see what work you might be doing in the role</li>
-                <li>check if you have the right skills</li>
-                <li>update your CV to show that you have skills or experience that fit the job</li>
-                <li>think of relevant experience that you can share with an employer</li>
+                <li>{{#__}}occupation-how-to.tasks.help.bullet-1{{/__}}</li>
+                <li>{{#__}}occupation-how-to.tasks.help.bullet-2{{/__}}</li>
+                <li>{{#__}}occupation-how-to.tasks.help.bullet-3{{/__}}</li>
+                <li>{{#__}}occupation-how-to.tasks.help.bullet-4{{/__}}</li>
             </ul>
         </div>
     </div>
 
     <div class="grid-row">
         <div class="column-half example-box">
-            <h3 class="heading-small">Words to use in your online search</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.titles.heading{{/__}}</h3>
             <em data-test="occupation-additional-titles" id="occupation-additional-titles">{{occupation.additionalTitles}}</em>
         </div>
         <div class="column-half">
-            <h3 class="heading-small">Use this to:</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.titles.help.heading{{/__}}</h3>
             <ul class="list-bullet">
-                <li>search job adverts – they can use different names for similar roles, so search with some of these words to find more adverts</li>
+                <li>{{#__}}occupation-how-to.titles.help.bullet-1{{/__}}</li>
             </ul>
         </div>
     </div>
 
     <div class="grid-row">
         <div class="column-half example-box">
-            <h3 class="heading-small">Qualifications you’ll need</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.qualifications.heading{{/__}}</h3>
             <p data-test="occupation-qualifications" id="occupation-qualifications">{{occupation.qualifications}}</p>
         </div>
         <div class="column-half">
-            <h3 class="heading-small">Use this to:</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.qualifications.help.heading{{/__}}</h3>
             <ul class="list-bullet">
-                <li>see the sort of qualifications you usually need for this role</li>
-                <li>figure out what training you need, so you can work out where to get it</li>
-                <li>plan a career path and discuss next steps with your work coach</li>
+                <li>{{#__}}occupation-how-to.qualifications.help.bullet-1{{/__}}</li>
+                <li>{{#__}}occupation-how-to.qualifications.help.bullet-2{{/__}}</li>
+                <li>{{#__}}occupation-how-to.qualifications.help.bullet-3{{/__}}</li>
             </ul>
         </div>
     </div>
 
     <div class="grid-row">
         <div class="column-half example-box">
-            <h3 class="heading-small">Your typical pay and hours</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.time.heading{{/__}}</h3>
             <ul>
-                <li data-test="occupation-week-hours">Around <span id="occupation-week-hours">{{occupation.weekHours}}</span> hours a week</li>
-                <li data-test="occupation-week-pay">Around £<span id="occupation-week-pay">{{occupation.weekPay}}</span> a week</li>
+                <li data-test="occupation-week-hours">{{content.week-hours}}</li>
+                <li data-test="occupation-week-pay">{{content.week-pay}}</li>
             </ul>
         </div>
         <div class="column-half">
-            <h3 class="heading-small">Use this to:</h3>
+            <h3 class="heading-small">{{#__}}occupation-how-to.time.help.heading{{/__}}</h3>
             <ul class="list-bullet">
-                <li>get a rough idea of how many hours per week you'd be working and how much you'd be paid</li>
-                <li>look for a career path that might make you more money</li>
+                <li>{{#__}}occupation-how-to.time.help.bullet-1{{/__}}</li>
+                <li>{{#__}}occupation-how-to.time.help.bullet-2{{/__}}</li>
             </ul>
         </div>
     </div>

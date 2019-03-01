@@ -16,5 +16,46 @@
   },
   "layout": {
     "title": "Work you could do"
+  },
+  "occupation-how-to": {
+    "heading": "How to use this information",
+    "tasks": {
+      "heading": "Kind of work you’d do",
+      "help": {
+        "heading": "Use this to:",
+        "bullet-1": "see what work you might be doing in the role",
+        "bullet-2": "check if you have the right skills",
+        "bullet-3": "update your CV to show that you have skills or experience that fit the job",
+        "bullet-4": "think of relevant experience that you can share with an employer"
+      }
+    },
+    "titles": {
+      "heading": "Words to use in your online search",
+      "help": {
+        "heading": "Use this to:",
+        "bullet-1": "search job adverts – they can use different names for similar roles, so search with some of these words to find more adverts",
+        "bullet-2": "occupation-how-to.titles.help.bullet-2",
+        "bullet-3": "occupation-how-to.titles.help.bullet-3"
+      }
+    },
+    "qualifications": {
+      "heading": "Qualifications you’ll need",
+      "help": {
+        "heading": "Use this to:",
+        "bullet-1": "see the sort of qualifications you usually need for this role",
+        "bullet-2": "figure out what training you need, so you can work out where to get it",
+        "bullet-3": "plan a career path and discuss next steps with your work coach"
+      }
+    },
+    "time": {
+      "heading": "Your typical pay and hours",
+      "hours": "Around %s hours a week",
+      "pay": "Around £%s a week",
+      "help": {
+        "heading": "Use this to:",
+        "bullet-1": "get a rough idea of how many hours per week you'd be working and how much you'd be paid",
+        "bullet-2": "look for a career path that might make you more money"
+      }
+    }
   }
 }
