@@ -1,4 +1,6 @@
-# work-you-could-do
+# work-you-could-do - deprecated
+
+*This project is no longer maintained and is superseded by Nation Career Service*
 
 [![Build status][build status image]][ci]
 
